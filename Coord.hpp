@@ -28,12 +28,20 @@ bool operator!=(Coord const& a, Coord const& b);
 class EnsCoord{
     // Attributs
     vector<Coord>k;
+    // Methode
+    int Position(Coord co)const;
     public:
         // Constructeurs:
         EnsCoord(vector<Coord> Ens);
         // Methodes:
-        int get_ksize()const;
         Coord get_kpos(int i)const;
+        Coord ieme(int n)const;
+        int get_ksize()const;
+        int taille()const;
+        bool contient(Coord co)const;
+        bool estVide()const;
+        void ajoute(Coord co);
+        void supprime(Coord co);
 };
 ostream &operator<<(ostream &out, const EnsCoord &coordtotal);
 #endif  
