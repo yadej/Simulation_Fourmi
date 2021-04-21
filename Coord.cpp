@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 #include "doctest.h"
 using namespace std;
 
@@ -12,8 +13,8 @@ Coord::Coord(int a,int b){
     lig = a;
     col = b;
 };
-EnsCoord(vector<Coord>Ens){
-    k=Ens;
+EnsCoord::EnsCoord(vector<Coord> Ens):k{}{
+    for(auto i:Ens)k.push_back(i);
 }
 
 int Coord::get_lig()const{
@@ -25,7 +26,7 @@ int Coord::get_col()const{
 int EnsCoord::get_ksize()const{
     return k.size();
 }
-int EnsCoord::get_kpos(int i)const{
+Coord EnsCoord::get_kpos(int i)const{
     return k[i];
 }
 

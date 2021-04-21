@@ -30,10 +30,10 @@ class EnsCoord{
     vector<Coord>k;
     public:
         // Constructeurs:
-        EnsCoord(vector<Coord>Ens);
+        EnsCoord(vector<Coord> Ens);
         // Methodes:
         int get_ksize()const;
-        int get_kpos(int i)const;
+        Coord get_kpos(int i)const;
 };
 ostream &operator<<(ostream &out, const EnsCoord &coordtotal);
 #endif  
