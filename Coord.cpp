@@ -48,6 +48,16 @@ std::ostream& Coord::print(std::ostream& out) const{
 ostream &operator<<(ostream &out, const Coord &coord){
     return coord.print(out);
 }
+std::ostream& EnsCoord::print(std::ostream& out) const{
+    for(long unsigned int i=0;i<k.size();i++){
+        out<<k[i];
+    }
+    return out;
+}
+ostream &operator<<(ostream &out, const EnsCoord &coordtotal){
+    return coordtotal.print(out);
+}
+/*
 ostream &operator<<(ostream &out, const EnsCoord &coordtotal){
     int p=coordtotal.get_ksize();
     for(int i=0;i<p;i++){
@@ -55,6 +65,7 @@ ostream &operator<<(ostream &out, const EnsCoord &coordtotal){
     }
     return out;
 }
+*/
 bool operator==(Coord const& a, Coord const& b){
     return a.get_lig()==b.get_lig() and a.get_col()==b.get_col();
 }
@@ -68,7 +79,7 @@ bool EnsCoord::contient(Coord co)const{
     if(Position(co)==-1)return false;else return true;
 }
 void EnsCoord::ajoute(Coord co){
-    if(Position(co)==-1)return;
+    if(Position(co)!=-1)return;
     k.push_back(co);
 }
 void EnsCoord::supprime(Coord co){

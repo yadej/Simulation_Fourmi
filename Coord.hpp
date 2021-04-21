@@ -42,6 +42,7 @@ class EnsCoord{
         bool estVide()const;
         void ajoute(Coord co);
         void supprime(Coord co);
+        std::ostream& print(std::ostream& out) const;
 };
 ostream &operator<<(ostream &out, const EnsCoord &coordtotal);
 #endif  
