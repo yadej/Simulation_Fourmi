@@ -1,6 +1,8 @@
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include <vector>
+#include <stdlib.h>
 #include "doctest.h"
 using namespace std;
 
@@ -13,6 +15,16 @@ Coord::Coord(int a,int b){
     lig = a;
     col = b;
 };
+TEST_CASE("test Coord") {
+    Coord k(5,6);
+    CHECK(k==Coord{5,6});
+    CHECK_THROWS_AS(Coord(-2,6),invalid_argument);
+    CHECK_THROWS_AS(Coord(2,-6),invalid_argument);
+    CHECK_THROWS_AS(Coord(21,6),invalid_argument);
+    CHECK_THROWS_AS(Coord(2,60),invalid_argument);
+    CHECK_THROWS_AS(Coord(-2,-6),invalid_argument);
+    CHECK_THROWS_AS(Coord(20,60),invalid_argument);
+}
 EnsCoord::EnsCoord(vector<Coord> Ens):tab{Ens}{
 };
 
@@ -86,6 +98,37 @@ Coord EnsCoord::ieme(int n)const{
     if(n<0 or n>int(tab.size())-1)throw invalid_argument("Indice incorrect");
     return tab[n];
 }
+TEST_CASE("test EnsCoord") {
+    EnsCoord b({Coord(1,6),Coord(2,6),Coord(3,6),Coord(4,6)});
+    CHECK(b.taille()==4);
+    CHECK(b.ieme(0)==Coord{1,6});
+    CHECK(b.contient(Coord{2,6}));
+    CHECK(b.contient(Coord{3,6}));
+    CHECK(b.contient(Coord{4,6}));
+    CHECK(b.ieme(0)==Coord{1,6});
+    CHECK(b.ieme(1)==Coord{2,6});
+    CHECK(b.ieme(2)==Coord{3,6});
+    CHECK(b.ieme(3)==Coord{4,6});
+    b.ajoute(Coord{1,6});
+    CHECK(b.taille()==4);
+    CHECK_THROWS_AS(b.supprime(Coord(0,6)),invalid_argument);
+    b.supprime(Coord(1,6));
+    CHECK_FALSE(b.contient(Coord{1,6}));
+    CHECK(b.taille()==3);
+    CHECK(b.ieme(0)==Coord{2,6});
+    CHECK(b.ieme(1)==Coord{3,6});
+    CHECK(b.ieme(2)==Coord{4,6});
+    b.ajoute(Coord{1,6});
+    b.ajoute(Coord{5,6});
+    CHECK(b.taille()==5);
+    CHECK(b.contient(Coord{3,6}));
+    CHECK(b.ieme(0)==Coord{2,6});
+    CHECK(b.ieme(1)==Coord{3,6});
+    CHECK(b.ieme(2)==Coord{4,6});
+    CHECK(b.ieme(3)==Coord{1,6});
+    CHECK(b.ieme(4)==Coord{5,6});
+    CHECK(EnsCoord{{}}.estVide());
+}
 
 EnsCoord voisines(Coord a){
     EnsCoord Tout({});
@@ -94,14 +137,69 @@ EnsCoord voisines(Coord a){
     int jmin = max(a.get_col()-1,0);
     int jmax = min(a.get_col()+1,TAILLEGRILLE-1);
     for(int i=imin;i<=imax;i++){
-        for(int j=jmin;j<=jmax;){
+        for(int j=jmin;j<=jmax;j++){
             Coord k(i,j);
             if(k!=a)Tout.ajoute(k);
         }
     }
     return Tout;
 }
+TEST_CASE("Test voisine"){
+    CHECK_THROWS_AS(voisines(Coord{50,50}),invalid_argument);
+    // Verifions un milieu
+    CHECK(voisines(Coord{10,10}).taille()==8);
+    CHECK(voisines(Coord{10,10}).contient(Coord{11,11}));
+    CHECK(voisines(Coord{10,10}).contient(Coord{11,10}));
+    CHECK(voisines(Coord{10,10}).contient(Coord{11,9}));
+    CHECK(voisines(Coord{10,10}).contient(Coord{9,11}));
+    CHECK(voisines(Coord{10,10}).contient(Coord{10,11}));
+    CHECK(voisines(Coord{10,10}).contient(Coord{9,9}));
+    CHECK(voisines(Coord{10,10}).contient(Coord{10,9}));
+    CHECK(voisines(Coord{10,10}).contient(Coord{9,10}));
+    // Verifions le coin en haut a gauche
+    CHECK(voisines(Coord{0,0}).taille()==3);
+    CHECK(voisines(Coord{0,0}).contient(Coord{1,0}));
+    CHECK(voisines(Coord{0,0}).contient(Coord{1,1}));
+    CHECK(voisines(Coord{0,0}).contient(Coord{0,1}));
+    // Verifions le mileu a gauche
+    CHECK(voisines(Coord{0,10}).taille()==5);
+    CHECK(voisines(Coord{0,10}).contient(Coord{0,11}));
+    CHECK(voisines(Coord{0,10}).contient(Coord{0,9}));
+    CHECK(voisines(Coord{0,10}).contient(Coord{1,11}));
+    CHECK(voisines(Coord{0,10}).contient(Coord{1,9}));
+    CHECK(voisines(Coord{0,10}).contient(Coord{1,10}));
+    // Check un point au hasard dans le mileu
+    int k = rand()%10 + 5; // 5 <= k <= 14
+    int l = rand()%10 + 5; // 5 <= l <= 14
+    CHECK(voisines(Coord{k,l}).taille()==8);
+    CHECK(voisines(Coord{k,l}).contient(Coord{k+1,l+1}));
+    CHECK(voisines(Coord{k,l}).contient(Coord{k+1,l}));
+    CHECK(voisines(Coord{k,l}).contient(Coord{k+1,l-1}));
+    CHECK(voisines(Coord{k,l}).contient(Coord{k,l+1}));
+    CHECK(voisines(Coord{k,l}).contient(Coord{k-1,l+1}));
+    CHECK(voisines(Coord{k,l}).contient(Coord{k-1,l-1}));
+    CHECK(voisines(Coord{k,l}).contient(Coord{k-1,l}));
+    CHECK(voisines(Coord{k,l}).contient(Coord{k,l-1}));
+    //Plus de test à faire pour mieux vérifier
+    
+}
 
+Coord EnsCoord::choixHasard(){
+  if(taille() == 0){
+    throw invalid_argument("L'ensemblde de coordonnées est vide");
+  }
+  int i = rand()%(taille());
+  return tab[i];
+}
+
+TEST_CASE("Fonction choixHasard"){
+    EnsCoord k({Coord(1,6),Coord(2,6),Coord(3,6),Coord(4,6)});
+    for(int i = 0; i < 50; i++){
+        Coord h = k.choixHasard();
+        CHECK(k.contient(h));
+    }
+
+}
 
 
 

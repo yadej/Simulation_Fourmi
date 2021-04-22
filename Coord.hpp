@@ -34,6 +34,7 @@ class EnsCoord{
         EnsCoord(vector<Coord> Ens);
         // Methodes:
         Coord ieme(int n)const;
+        Coord choixHasard();
         int taille()const;
         bool contient(Coord co)const;
         bool estVide()const;
@@ -42,5 +43,6 @@ class EnsCoord{
         std::ostream& print(std::ostream& out) const;
 };
 ostream &operator<<(ostream &out, const EnsCoord &coordtotal);
+bool operator==(EnsCoord const& a, EnsCoord const& b);
 EnsCoord voisines(Coord a);
 #endif  
