@@ -27,7 +27,7 @@ bool operator!=(Coord const& a, Coord const& b);
 
 class EnsCoord{
     // Attributs
-    vector<Coord>k;
+    vector<Coord>tab;
     // Methode
     int Position(Coord co)const;
     public:
@@ -36,7 +36,6 @@ class EnsCoord{
         // Methodes:
         Coord get_kpos(int i)const;
         Coord ieme(int n)const;
-        int get_ksize()const;
         int taille()const;
         bool contient(Coord co)const;
         bool estVide()const;

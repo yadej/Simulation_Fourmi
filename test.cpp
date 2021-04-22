@@ -29,7 +29,7 @@ TEST_CASE("test EnsCoord") {
     CHECK_THROWS_AS(b.supprime(Coord(0,6)),invalid_argument);
     b.supprime(Coord(1,6));
     CHECK_FALSE(b.contient(Coord{1,6}));
-    CHECK(b.get_ksize()==3);
+    CHECK(b.taille()==3);
     CHECK(b.ieme(0)==Coord{2,6});
     CHECK(b.ieme(1)==Coord{3,6});
     CHECK(b.ieme(2)==Coord{4,6});

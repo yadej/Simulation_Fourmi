@@ -13,9 +13,8 @@ Coord::Coord(int a,int b){
     lig = a;
     col = b;
 };
-EnsCoord::EnsCoord(vector<Coord> Ens):k{}{
-    for(auto i:Ens)k.push_back(i);
-}
+EnsCoord::EnsCoord(vector<Coord> Ens):tab{Ens}{
+};
 
 //Fonction getter
 int Coord::get_lig()const{
@@ -24,15 +23,10 @@ int Coord::get_lig()const{
 int Coord::get_col()const{
     return col;
 }
-int EnsCoord::get_ksize()const{
-    return k.size();
-}
-Coord EnsCoord::get_kpos(int i)const{
-    return k[i];
-}
+
 int EnsCoord::Position(Coord co)const{
     int a=0;
-    for(auto i:k){
+    for(auto i:tab){
         if(i==co)return a;
         a++;
     }
@@ -49,8 +43,8 @@ ostream &operator<<(ostream &out, const Coord &coord){
     return coord.print(out);
 }
 std::ostream& EnsCoord::print(std::ostream& out) const{
-    for(long unsigned int i=0;i<k.size();i++){
-        out<<k[i];
+    for(long unsigned int i=0;i<tab.size();i++){
+        out<<tab[i];
     }
     return out;
 }
@@ -79,24 +73,22 @@ bool EnsCoord::contient(Coord co)const{
     if(Position(co)==-1)return false;else return true;
 }
 void EnsCoord::ajoute(Coord co){
-    if(Position(co)!=-1)return;
-    k.push_back(co);
+    if(!contient(co))tab.push_back(co);
 }
 void EnsCoord::supprime(Coord co){
     if(!contient(co))throw invalid_argument("Cette position n'est pas dans le tableau");
-    k.erase(k.begin()+Position(co));
+    tab.erase(tab.begin()+Position(co));
 }
 bool EnsCoord::estVide() const {
-    return k.empty();
+    return tab.empty();
 }
 int EnsCoord::taille()const{
-    return get_ksize();
+    return(int(tab.size()));
 }
 
 Coord EnsCoord::ieme(int n)const{
-    if(n<0)return get_kpos(0);
-    else if(n>get_ksize())return get_kpos(get_ksize()-1);
-    else return get_kpos(n);
+    if(n<0 or n>int(tab.size())-1)throw invalid_argument("Indice incorrect");
+    return tab[n];
 }
 
 
