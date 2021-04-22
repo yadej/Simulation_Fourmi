@@ -18,7 +18,6 @@ class Coord{
         // Methodes:
         int get_lig()const;
         int get_col()const;
-        std::ostream& print(std::ostream& out) const;
 };
 
 ostream &operator<<(ostream &out, const Coord &coord);
@@ -34,7 +33,6 @@ class EnsCoord{
         // Constructeurs:
         EnsCoord(vector<Coord> Ens);
         // Methodes:
-        Coord get_kpos(int i)const;
         Coord ieme(int n)const;
         int taille()const;
         bool contient(Coord co)const;
@@ -44,4 +42,5 @@ class EnsCoord{
         std::ostream& print(std::ostream& out) const;
 };
 ostream &operator<<(ostream &out, const EnsCoord &coordtotal);
+EnsCoord voisines(Coord a);
 #endif  

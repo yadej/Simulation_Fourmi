@@ -35,12 +35,8 @@ int EnsCoord::Position(Coord co)const{
 
 //Surcharge d'operateur
 
-std::ostream& Coord::print(std::ostream& out) const{
-    out<<"("<<lig<<col<<")"<<endl;
-    return out;
-}
 ostream &operator<<(ostream &out, const Coord &coord){
-    return coord.print(out);
+    return out<<"("<<coord.get_lig()<<","<<coord.get_col()<<")"<<endl;
 }
 std::ostream& EnsCoord::print(std::ostream& out) const{
     for(long unsigned int i=0;i<tab.size();i++){
@@ -91,7 +87,20 @@ Coord EnsCoord::ieme(int n)const{
     return tab[n];
 }
 
-
+EnsCoord voisines(Coord a){
+    EnsCoord Tout({});
+    int imin = max(a.get_lig()-1,0);
+    int imax = min(a.get_lig()+1,TAILLEGRILLE-1);
+    int jmin = max(a.get_col()-1,0);
+    int jmax = min(a.get_col()+1,TAILLEGRILLE-1);
+    for(int i=imin;i<=imax;i++){
+        for(int j=jmin;j<=jmax;){
+            Coord k(i,j);
+            if(k!=a)Tout.ajoute(k);
+        }
+    }
+    return Tout;
+}
 
 
 
