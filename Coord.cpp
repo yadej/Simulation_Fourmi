@@ -9,7 +9,7 @@ using namespace std;
 #include "Coord.hpp"
 //Constructeurs
 Coord::Coord(int a,int b){
-    if(a < 0 or b < 0 or a > TAILLEGRILLE or b > TAILLEGRILLE){
+    if(a < 0 or b < 0 or a >= TAILLEGRILLE or b >= TAILLEGRILLE){
         throw invalid_argument("Position qui n'est pas dans la Grille ");
     }
     lig = a;
@@ -94,39 +94,39 @@ int EnsCoord::taille()const{
     return(int(tab.size()));
 }
 
-Coord EnsCoord::ieme(int n)const{
+Coord EnsCoord::iem(int n)const{
     if(n<0 or n>int(tab.size())-1)throw invalid_argument("Indice incorrect");
     return tab[n];
 }
 TEST_CASE("test EnsCoord") {
     EnsCoord b({Coord(1,6),Coord(2,6),Coord(3,6),Coord(4,6)});
     CHECK(b.taille()==4);
-    CHECK(b.ieme(0)==Coord{1,6});
+    CHECK(b.iem(0)==Coord{1,6});
     CHECK(b.contient(Coord{2,6}));
     CHECK(b.contient(Coord{3,6}));
     CHECK(b.contient(Coord{4,6}));
-    CHECK(b.ieme(0)==Coord{1,6});
-    CHECK(b.ieme(1)==Coord{2,6});
-    CHECK(b.ieme(2)==Coord{3,6});
-    CHECK(b.ieme(3)==Coord{4,6});
+    CHECK(b.iem(0)==Coord{1,6});
+    CHECK(b.iem(1)==Coord{2,6});
+    CHECK(b.iem(2)==Coord{3,6});
+    CHECK(b.iem(3)==Coord{4,6});
     b.ajoute(Coord{1,6});
     CHECK(b.taille()==4);
     CHECK_THROWS_AS(b.supprime(Coord(0,6)),invalid_argument);
     b.supprime(Coord(1,6));
     CHECK_FALSE(b.contient(Coord{1,6}));
     CHECK(b.taille()==3);
-    CHECK(b.ieme(0)==Coord{2,6});
-    CHECK(b.ieme(1)==Coord{3,6});
-    CHECK(b.ieme(2)==Coord{4,6});
+    CHECK(b.iem(0)==Coord{2,6});
+    CHECK(b.iem(1)==Coord{3,6});
+    CHECK(b.iem(2)==Coord{4,6});
     b.ajoute(Coord{1,6});
     b.ajoute(Coord{5,6});
     CHECK(b.taille()==5);
     CHECK(b.contient(Coord{3,6}));
-    CHECK(b.ieme(0)==Coord{2,6});
-    CHECK(b.ieme(1)==Coord{3,6});
-    CHECK(b.ieme(2)==Coord{4,6});
-    CHECK(b.ieme(3)==Coord{1,6});
-    CHECK(b.ieme(4)==Coord{5,6});
+    CHECK(b.iem(0)==Coord{2,6});
+    CHECK(b.iem(1)==Coord{3,6});
+    CHECK(b.iem(2)==Coord{4,6});
+    CHECK(b.iem(3)==Coord{1,6});
+    CHECK(b.iem(4)==Coord{5,6});
     CHECK(EnsCoord{{}}.estVide());
 }
 
@@ -146,6 +146,11 @@ EnsCoord voisines(Coord a){
 }
 TEST_CASE("Test voisine"){
     CHECK_THROWS_AS(voisines(Coord{50,50}),invalid_argument);
+    CHECK_THROWS_AS(voisines(Coord{-1,10}),invalid_argument);
+    CHECK_THROWS_AS(voisines(Coord{10,-1}),invalid_argument);
+    CHECK_THROWS_AS(voisines(Coord{21,10}),invalid_argument);
+    CHECK_THROWS_AS(voisines(Coord{10,21}),invalid_argument);
+
     // Verifions un milieu
     CHECK(voisines(Coord{10,10}).taille()==8);
     CHECK(voisines(Coord{10,10}).contient(Coord{11,11}));
@@ -180,7 +185,58 @@ TEST_CASE("Test voisine"){
     CHECK(voisines(Coord{k,l}).contient(Coord{k-1,l-1}));
     CHECK(voisines(Coord{k,l}).contient(Coord{k-1,l}));
     CHECK(voisines(Coord{k,l}).contient(Coord{k,l-1}));
+    // Verifions pour un point au hasard sur le bord haut,
+    // mais pas dans un coin
+    int m = rand()%18 + 1; // 1<= m <= 18
+    int n = 0;
+    CHECK(voisines(Coord{m, n}).taille() == 5);
+    CHECK_FALSE(voisines(Coord{m, n}).contient(Coord{m, n}));
+    CHECK(voisines(Coord{m, n}).contient(Coord{m-1, n}));
+    CHECK(voisines(Coord{m, n}).contient(Coord{m+1, n}));
+    CHECK(voisines(Coord{m, n}).contient(Coord{m+1, n+1}));
+    CHECK(voisines(Coord{m, n}).contient(Coord{m, n+1}));
+    CHECK(voisines(Coord{m, n}).contient(Coord{m-1, n+1}));
+    // Verifions pour un point au hasard sur le bord droit,
+    // mais pas dans un coin
+    int p = TAILLEGRILLE - 1;
+    int q = rand()%18 + 1; // 1 <= q <= 18
+    CHECK(voisines(Coord{p, q}).taille() == 5);
+    CHECK_FALSE(voisines(Coord{p, q}).contient(Coord{p, q}));
+    CHECK(voisines(Coord{p, q}).contient(Coord{p, q-1}));
+    CHECK(voisines(Coord{p, q}).contient(Coord{p-1, q-1}));
+    CHECK(voisines(Coord{p, q}).contient(Coord{p-1, q}));
+    CHECK(voisines(Coord{p, q}).contient(Coord{p-1, q+1}));
+    CHECK(voisines(Coord{p, q}).contient(Coord{p, q+1}));
+    // Vérifions pour un point au hasard sur le bors du  bas
+    // mais pas dans un coin
+    int r = rand()%18 + 1; // 1<= r <= 18
+    int s = TAILLEGRILLE - 1;
+    CHECK(voisines(Coord{r, s}).taille() == 5);
+    CHECK_FALSE(voisines(Coord{r, s}).contient(Coord{r, s}));
+    CHECK(voisines(Coord{r, s}).contient(Coord{r-1, s}));
+    CHECK(voisines(Coord{r, s}).contient(Coord{r-1, s-1}));
+    CHECK(voisines(Coord{r, s}).contient(Coord{r, s-1}));
+    CHECK(voisines(Coord{r, s}).contient(Coord{r+1, s-1}));
+    CHECK(voisines(Coord{r, s}).contient(Coord{r+1, s}));
+    // Verifions tout les points au centres
+    /*
+    for(int i=1;i<TAILLEGRILLE-1;i++){
+        for(int j=1;j<TAILLEGRILLE-1;j++){
+            CHECK(voisines(Coord{i,j}).taille()==8);
+            CHECK(voisines(Coord{i,j}).contient(Coord{i+1,j+1}));
+            CHECK(voisines(Coord{i,j}).contient(Coord{i+1,j}));
+            CHECK(voisines(Coord{i,j}).contient(Coord{i+1,j-1}));
+            CHECK(voisines(Coord{i,j}).contient(Coord{i,j+1}));
+            CHECK(voisines(Coord{i,j}).contient(Coord{i-1,j+1}));
+            CHECK(voisines(Coord{i,j}).contient(Coord{i-1,j-1}));
+            CHECK(voisines(Coord{i,j}).contient(Coord{i-1,j}));
+            CHECK(voisines(Coord{i,j}).contient(Coord{i,j-1}));
+        }
+    }
+    */
+    
     //Plus de test à faire pour mieux vérifier
+    
     
 }
 

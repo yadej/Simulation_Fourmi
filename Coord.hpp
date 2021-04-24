@@ -33,7 +33,7 @@ class EnsCoord{
         // Constructeurs:
         EnsCoord(vector<Coord> Ens);
         // Methodes:
-        Coord ieme(int n)const;
+        Coord iem(int n)const;
         Coord choixHasard();
         int taille()const;
         bool contient(Coord co)const;

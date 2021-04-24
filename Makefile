@@ -4,13 +4,16 @@ EXEC_FILES= tests
 
 all: tests
 # Regle generique
-tests: tests.o coords.o
+tests: tests.o coords.o Fourmi.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
     
 tests.o:test.cpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
 
 coords.o: Coord.cpp Coord.hpp
+	$(CXX) -o $@ -c $< $(CXXFLAGS)
+
+Fourmi.o: Fourmi.cpp Fourmi.hpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
 
 clean:
