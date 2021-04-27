@@ -57,7 +57,7 @@ void Fourmi::deplace(Coord k){
         throw invalid_argument("Position trop loin");
     }
 }
-TEST_CASE("Test Méthode prendSucre et PoseSucre"){
+TEST_CASE("Test Méthode prendSucre et PoseSucre + deplace"){
     Coord a(3,5);
     int p = 12;
     Fourmi k(a,p);
@@ -72,3 +72,18 @@ TEST_CASE("Test Méthode prendSucre et PoseSucre"){
     CHECK_FALSE(k.porteSucre());
     
 }
+
+EnsFourmi::EnsFourmi(Coord a): coord(a){}
+
+Fourmi EnsFourmi::creeFourmi(){
+    Fourmi k(coord,Fourmigenere.size());
+    Fourmigenere.push_back(k);
+    return  Fourmigenere[Fourmigenere.size()-1];
+}
+
+
+
+
+
+
+

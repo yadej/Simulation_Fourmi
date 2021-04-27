@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 #include <iostream>
-using namespace std;
 
 class Fourmi{
     Coord coord;
@@ -37,5 +36,15 @@ class Fourmi{
         void deplace(Coord k);
 };
 
-ostream &operator<<(ostream &out, const Fourmi &fourmi);
+std::ostream &operator<<(std::ostream &out, const Fourmi &fourmi);
+
+class EnsFourmi{
+    Coord coord;
+    std::vector<Fourmi> Fourmigenere;
+    public:
+        EnsFourmi(Coord a);
+        Fourmi creeFourmi();
+        
+        
+};
 #endif  

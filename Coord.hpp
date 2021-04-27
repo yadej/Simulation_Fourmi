@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 #include <iostream>
-using namespace std;
 
 const int TAILLEGRILLE = 20;
 
@@ -20,18 +19,18 @@ class Coord{
         int get_col()const;
 };
 
-ostream &operator<<(ostream &out, const Coord &coord);
+std::ostream &operator<<(std::ostream &out, const Coord &coord);
 bool operator==(Coord const& a, Coord const& b);
 bool operator!=(Coord const& a, Coord const& b);
 
 class EnsCoord{
     // Attributs
-    vector<Coord>tab;
+    std::vector<Coord>tab;
     // Methode
     int Position(Coord co)const;
     public:
         // Constructeurs:
-        EnsCoord(vector<Coord> Ens);
+        EnsCoord(std::vector<Coord> Ens);
         // Methodes:
         Coord iem(int n)const;
         Coord choixHasard();
@@ -42,7 +41,7 @@ class EnsCoord{
         void supprime(Coord co);
         std::ostream& print(std::ostream& out) const;
 };
-ostream &operator<<(ostream &out, const EnsCoord &coordtotal);
+std::ostream &operator<<(std::ostream &out, const EnsCoord &coordtotal);
 bool operator==(EnsCoord const& a, EnsCoord const& b);
 EnsCoord voisines(Coord a);
 #endif  
