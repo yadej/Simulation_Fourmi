@@ -21,6 +21,9 @@ int Fourmi::num()const{
 bool Fourmi::porteSucre()const{
     return aSucre;
 }
+void Fourmi::newind(int n){
+    ind=n;
+}
 
 ostream &operator<<(ostream &out, const Fourmi &fourmi){
     out<<"Les coords de la fourmi sont "<<fourmi.coords()<<" et son num est"<<fourmi.num();
@@ -75,10 +78,21 @@ TEST_CASE("Test Méthode prendSucre et PoseSucre + deplace"){
 
 EnsFourmi::EnsFourmi(Coord a): coord(a){}
 
-Fourmi EnsFourmi::creeFourmi(){
-    Fourmi k(coord,Fourmigenere.size());
+void EnsFourmi::creeFourmi(){
+    Fourmi k(coord,Fourmigenere.size()+1);
     Fourmigenere.push_back(k);
-    return  Fourmigenere[Fourmigenere.size()-1];
+}
+
+void EnsFourmi::supprimeFourmi(int ind){
+    if(ind<1 or ind>int(Fourmigenere.size()))throw invalid_argument("Indice incorrect");
+    Fourmigenere.erase(Fourmigenere.begin()+ind-1);
+    for(long unsigned int i=0;i<Fourmigenere.size();i++){
+        Fourmigenere[i].newind(i+1);
+    }
+}
+Fourmi EnsFourmi::iem(int n){
+    if(n<1 or n>int(Fourmigenere.size()))throw invalid_argument("Indice incorrect");
+    return Fourmigenere[n-1];
 }
 
 

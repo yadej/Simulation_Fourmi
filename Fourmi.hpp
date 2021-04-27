@@ -34,6 +34,9 @@ class Fourmi{
          //* La fourmi se deplace dans cette coordonnee si elle est bien proche
         //* @param[in] k : les coordonnees 
         void deplace(Coord k);
+        //* Change l'indice de la Fourmi
+        //* @param[in] n: la nouvelle indice
+        void newind(int n);
 };
 
 std::ostream &operator<<(std::ostream &out, const Fourmi &fourmi);
@@ -43,7 +46,9 @@ class EnsFourmi{
     std::vector<Fourmi> Fourmigenere;
     public:
         EnsFourmi(Coord a);
-        Fourmi creeFourmi();
+        void creeFourmi();
+        void supprimeFourmi(int ind);
+        Fourmi iem(int n);
         
         
 };
