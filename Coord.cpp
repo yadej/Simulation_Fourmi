@@ -25,8 +25,9 @@ TEST_CASE("test Coord") {
     CHECK_THROWS_AS(Coord(-2,-6),invalid_argument);
     CHECK_THROWS_AS(Coord(20,60),invalid_argument);
 }
-EnsCoord::EnsCoord(vector<Coord> Ens):tab{Ens}{
-};
+EnsCoord::EnsCoord(){};
+
+EnsCoord::EnsCoord(vector<Coord> Ens):tab{Ens}{};
 
 //Fonction getter
 int Coord::get_lig()const{
@@ -131,7 +132,7 @@ TEST_CASE("test EnsCoord") {
 }
 
 EnsCoord voisines(Coord a){
-    EnsCoord Tout({});
+    EnsCoord Tout = EnsCoord();
     int imin = max(a.get_lig()-1,0);
     int imax = min(a.get_lig()+1,TAILLEGRILLE-1);
     int jmin = max(a.get_col()-1,0);

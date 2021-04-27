@@ -10,46 +10,57 @@ class Fourmi{
     int ind;
     bool aSucre;
     public:
-        //Constructeur
-        //* @param[out] a : la fourmi
-        //* @param[in] a : coordonnee de la fourmi
-        //* @param[in] v : son numero
-        Fourmi(Coord a,int indice);
-        //methode
-        //* Retourne les coord de la fourmi
-        //*  @return : coord
-        Coord coords()const;
-        //* Retourne le numero de la fourmi
-        //*  @return : ind
-        int num()const;
-        //* Test si la fourmi porte du sucre
-        //* @return : un booléen selon le résultat du test
-        bool porteSucre()const;
-        //* La fourmi prend un sucre
-        void prendSucre();
-        //* La fourmi pose un sucre
-        void poseSucre();
-        //* La fourmi se deplace aleatoirement
-        void deplace();
-         //* La fourmi se deplace dans cette coordonnee si elle est bien proche
-        //* @param[in] k : les coordonnees 
-        void deplace(Coord k);
-        //* Change l'indice de la Fourmi
-        //* @param[in] n: la nouvelle indice
-        void newind(int n);
+    //Constructeur
+    //* @param[out] f : la fourmi
+    //* @param[in] a : coordonnee de la fourmi
+    //* @param[in] v : son numero
+    Fourmi(Coord a,int indice);
+    //methode
+    //* Retourne les coord de la fourmi
+    //*  @return : coord
+    Coord coords()const;
+    //* Retourne le numero de la fourmi
+    //*  @return : ind
+    int num()const;
+    //* Test si la fourmi porte du sucre
+    //* @return : un booléen selon le résultat du test
+    bool porteSucre()const;
+    //* La fourmi prend un sucre
+    void prendSucre();
+    //* La fourmi pose un sucre
+    void poseSucre();
+    //* La fourmi se deplace aleatoirement
+    void deplace();
+    //* La fourmi se deplace dans cette coordonnee si elle est bien proche
+    //* @param[in] k : les coordonnees 
+    void deplace(Coord k);
+    //* Change l'indice de la Fourmi
+    //* @param[in] n: la nouvelle indice
+    void newind(int n);
 };
 
 std::ostream &operator<<(std::ostream &out, const Fourmi &fourmi);
+
 
 class EnsFourmi{
     Coord coord;
     std::vector<Fourmi> Fourmigenere;
     public:
-        EnsFourmi(Coord a);
-        void creeFourmi();
-        void supprimeFourmi(int ind);
-        Fourmi iem(int n);
-        
+    //Constructeur
+    //* @param[out] N:l'ensemble de fourmi
+    //* @param[in] a: les coords du nid.
+    EnsFourmi(Coord a);
+    //methode
+    //* Cree une nouvelle fourmi a partir du point de spawn
+    void creeFourmi();
+    //* Supprime une fourmi dans le tableau si une meurt
+    //* @param[in] ind: l'indice du tableau ou la fourmi est
+    void supprimeFourmi(int ind);
+    //* Retourne la Fourmi de l'indice n-1
+    //* @param[in] n: l'indice
+    Fourmi iem(int n);
+    EnsCoord TotalPosFourmi();
         
 };
+
 #endif  

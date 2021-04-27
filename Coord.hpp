@@ -30,6 +30,7 @@ class EnsCoord{
     int Position(Coord co)const;
     public:
         // Constructeurs:
+        EnsCoord();
         EnsCoord(std::vector<Coord> Ens);
         // Methodes:
         Coord iem(int n)const;

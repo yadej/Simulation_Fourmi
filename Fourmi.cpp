@@ -95,8 +95,18 @@ Fourmi EnsFourmi::iem(int n){
     return Fourmigenere[n-1];
 }
 
+EnsCoord EnsFourmi::TotalPosFourmi(){
+    EnsCoord k = EnsCoord();
+    for(long unsigned int i = 0;i < Fourmigenere.size();i++){
+        k.ajoute(Fourmigenere[i].coords());
+    }
+    return k;
+}
 
 
+TEST_CASE("Test EnsFourmi"){
+    //A faire des test
+}
 
 
 
