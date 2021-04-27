@@ -37,4 +37,5 @@ class Fourmi{
         void deplace(Coord k);
 };
 
+ostream &operator<<(ostream &out, const Fourmi &fourmi);
 #endif  

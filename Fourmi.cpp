@@ -21,6 +21,12 @@ int Fourmi::num()const{
 bool Fourmi::porteSucre()const{
     return aSucre;
 }
+
+ostream &operator<<(ostream &out, const Fourmi &fourmi){
+    out<<"Les coords de la fourmi sont "<<fourmi.coords()<<" et son num est"<<fourmi.num();
+    if(fourmi.porteSucre())out<<" et porte du sucre";
+    return out;
+}
 TEST_CASE("Test du constructeur des coordonnées"){
     Coord a(3,5);
     int p = 12;
