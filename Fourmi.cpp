@@ -75,24 +75,37 @@ TEST_CASE("Test Méthode prendSucre et PoseSucre + deplace"){
     CHECK_FALSE(k.porteSucre());
     
 }
+vector<Fourmi> creeTabFourmi(EnsCoord total){
+    for(int m = 0;m<total.taille();m++){
+        for(int n=m+1;n<total.taille();n++){
+            if(total.iem(n)==total.iem(m))throw invalid_argument("Plusieurs Fourmie meme case");
+        }
+    }
+    vector<Fourmi>k= {};
+    for(int i=0; i<total.taille();i++){
+        k.push_back(Fourmi(total.iem(i),i));
+    }
+    return k;
+}
+
 
 EnsFourmi::EnsFourmi(Coord a): coord(a){}
 
 void EnsFourmi::creeFourmi(){
-    Fourmi k(coord,Fourmigenere.size()+1);
+    Fourmi k(coord,Fourmigenere.size());
     Fourmigenere.push_back(k);
 }
 
 void EnsFourmi::supprimeFourmi(int ind){
-    if(ind<1 or ind>int(Fourmigenere.size()))throw invalid_argument("Indice incorrect");
+    if(ind<0 or ind>int(Fourmigenere.size()))throw invalid_argument("Indice incorrect");
     Fourmigenere.erase(Fourmigenere.begin()+ind-1);
     for(long unsigned int i=0;i<Fourmigenere.size();i++){
-        Fourmigenere[i].newind(i+1);
+        Fourmigenere[i].newind(i);
     }
 }
 Fourmi EnsFourmi::iem(int n){
-    if(n<1 or n>int(Fourmigenere.size()))throw invalid_argument("Indice incorrect");
-    return Fourmigenere[n-1];
+    if(n<0 or n>int(Fourmigenere.size()))throw invalid_argument("Indice incorrect");
+    return Fourmigenere[n];
 }
 
 EnsCoord EnsFourmi::TotalPosFourmi(){

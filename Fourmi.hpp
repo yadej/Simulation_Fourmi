@@ -38,9 +38,9 @@ class Fourmi{
     //* @param[in] n: la nouvelle indice
     void newind(int n);
 };
+std::vector<Fourmi> creeTabFourmi(EnsCoord c);
 
 std::ostream &operator<<(std::ostream &out, const Fourmi &fourmi);
-
 
 class EnsFourmi{
     Coord coord;
