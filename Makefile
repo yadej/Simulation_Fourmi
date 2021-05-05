@@ -7,7 +7,13 @@ all: tests
 tests: tests.o coords.o Fourmi.o Place.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
     
+Affichage: Affichage.o coords.o Fourmi.o Place.o
+	$(CXX) -o $@ $^ $(LDFLAGS)    
+    
 tests.o:test.cpp
+	$(CXX) -o $@ -c $< $(CXXFLAGS)
+
+Affichage.o:Affichage.cpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
 
 coords.o: Coord.cpp Coord.hpp

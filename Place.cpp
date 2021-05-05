@@ -83,7 +83,7 @@ void Place::posePheroSucre(){
 void Place::diminuePheroSucre(){
     if(pheroSucre <= 5)pheroSucre = 0;else pheroSucre -= 5;   
 }
-void deplaceFourmi(Fourmi f, Place p1, Place p2){
+void deplaceFourmi(Fourmi &f, Place &p1, Place &p2){
     Coord k = p1.get_coord();
     if(!(voisines(k).contient(p2.get_coord())))throw invalid_argument("Position de deplacement invalide");
     if(p2.contientSucre())throw invalid_argument("deja du sucre sur la place"); 
@@ -103,6 +103,7 @@ bool estVide(Place p1){
 bool estPlusProcheNid(Place p1, Place p2){
     return (p1.get_pheroNid() > p2.get_pheroNid());
 }
+
 TEST_CASE("Test des méthodes de la classe abstraite Place"){
   Place p1(Coord{ 2, 2 });
   Place p2(Coord{ 2, 1 });  
@@ -150,17 +151,19 @@ TEST_CASE("Test des méthodes de la classe abstraite Place"){
   
   p3.poseFourmi(f1);
   CHECK(p3.get_numeroFourmi() == 1);
-  CHECK_THROWS_AS(deplaceFourmi(Fourmi{ Coord{1,2}, 1}, p3, p2), invalid_argument);
-  CHECK_THROWS_AS(deplaceFourmi(Fourmi{ Coord{2,0}, 1}, p3, p1), invalid_argument);
+  Fourmi f2(Coord{1,2}, 1);
+  Fourmi f3(Coord{2,0}, 3);
+  CHECK_THROWS_AS(deplaceFourmi(f2, p3, p2), invalid_argument);
+  CHECK_THROWS_AS(deplaceFourmi(f1, p3, p1), invalid_argument);
   p1.enleveSucre();
-  CHECK_THROWS_AS(deplaceFourmi(Fourmi{ Coord{2,0}, 1}, p3, p1), invalid_argument);
-  CHECK_THROWS_AS(deplaceFourmi(Fourmi{ Coord{2,0}, 1}, p1, p3), invalid_argument);
-  CHECK_THROWS_AS(deplaceFourmi(Fourmi{ Coord{2,1}, 3}, p2, p3), invalid_argument);
-  CHECK_THROWS_AS(deplaceFourmi(Fourmi{ Coord{2,1}, 3}, p3, p2), invalid_argument);
+  CHECK_THROWS_AS(deplaceFourmi(f1, p3, p1), invalid_argument);
+  CHECK_THROWS_AS(deplaceFourmi(f1, p1, p3), invalid_argument);
+  CHECK_THROWS_AS(deplaceFourmi(f3, p2, p3), invalid_argument);
+  CHECK_THROWS_AS(deplaceFourmi(f3, p3, p2), invalid_argument);
   // Rajouter qql tests pour les erreurs
   deplaceFourmi(f1, p3, p2);
   //CHECK_THROWS_AS(deplaceFourmi(f1, p2, p1), invalid_argument);
-  //deplaceFourmi(f1, p2, p3);
+  deplaceFourmi(f1, p2, p3);
   p1.enleveSucre();
   CHECK(estVide(p1));
   p1.poseNid();
@@ -210,7 +213,7 @@ void Grille::rangePlace(Place p){
     Coord k = p.get_coord();
     tab[k.get_lig()][k.get_col()]= p;
 }
-void placeNid(Grille g,EnsCoord C){
+void placeNid(Grille &g,EnsCoord C){
     /*
     for(int i=0;i<C.taille();i++){
         Coord k = C.iem(i);
@@ -223,11 +226,12 @@ void placeNid(Grille g,EnsCoord C){
          if(g.TailleGrille()<k.get_lig() or g.SubTailleGrille()<k.get_col())throw invalid_argument("Coordonnee pas dans la Grille");
          Place p = g.chargePlace(k);
          p.poseNid();
+         p.posePheroNid(1);
          g.rangePlace(p);
      }
 }
 
-void PlaceSucre(Grille g,EnsCoord C){
+void PlaceSucre(Grille &g,EnsCoord C){
     for(int i=0;i<C.taille();i++){
          Coord k = C.iem(i);
          if(g.TailleGrille()<k.get_lig() or g.SubTailleGrille()<k.get_col())throw invalid_argument("Coordonnee pas dans la Grille");
@@ -237,7 +241,7 @@ void PlaceSucre(Grille g,EnsCoord C){
      }
 }
 
-void PlaceFourmi(Grille g,std::vector<Fourmi> F){
+void PlaceFourmi(Grille &g,std::vector<Fourmi> F){
     for(size_t i=0;i<F.size();i++){
          Coord k = F[i].coords();
          if(g.TailleGrille()<k.get_lig() or g.SubTailleGrille()<k.get_col())throw invalid_argument("Coordonnee pas dans la Grille");
@@ -247,16 +251,53 @@ void PlaceFourmi(Grille g,std::vector<Fourmi> F){
      }
 }
 
-Grille initialiseGrille(std::vector<Fourmi> F,EnsCoord Sucre,EnsCoord Nid){
-    Grille g = Grille();
+void initialiseGrille(Grille &g,std::vector<Fourmi> F,EnsCoord Sucre,EnsCoord Nid){
+    g = Grille();
     placeNid(g,Nid);
     PlaceSucre(g,Sucre);
     PlaceFourmi(g,F);
-    return g;
 }
+void lineariserPheroNid(Grille &g){
+    bool stable = false;
+    while(stable == false){
+        stable = true;
+        for(int i=0; i<TAILLEGRILLE;i++){
+            for(int j=0;j<TAILLEGRILLE;j++){
+                Coord C1(i,j);
+                Place p1 =  g.chargePlace(C1);
+                if(p1.get_pheroNid()<1){
+                    EnsCoord voisin = voisines(C1);
+                    float maxPhero = 0;
+                    for(Coord Cv: voisin.get_tab()){
+                        Place p2 = g.chargePlace(Cv);
+                        maxPhero = max(maxPhero, p2.get_pheroNid());
+                    }
+                    maxPhero = maxPhero - 1./TAILLEGRILLE;
+                    if(maxPhero > p1.get_pheroNid()){
+                        p1.posePheroNid(maxPhero);
+                        g.rangePlace(p1);
+                        stable = false;
+                    }
+                }
+            }
+        }
+    }
+}
+void affichageGrillePheroNid(Grille g){
+    for(int i=0; i<TAILLEGRILLE;i++){
+        for(int j=0;j<TAILLEGRILLE;j++){
+            Coord C1(i,j);
+            Place p1 =  g.chargePlace(C1);
+            cout<<p1.get_pheroNid()<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 
 TEST_CASE("Grille Constructeur"){
     //A Faire Les Tests
+    
 }
 
 

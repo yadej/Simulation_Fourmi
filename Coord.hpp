@@ -33,6 +33,7 @@ class EnsCoord{
         EnsCoord();
         EnsCoord(std::vector<Coord> Ens);
         // Methodes:
+        std::vector<Coord> get_tab(){return tab;}
         Coord iem(int n)const;
         Coord choixHasard();
         int taille()const;
