@@ -66,7 +66,7 @@ class Grille{
 void placeNid(Grille &g,EnsCoord C);
 void PlaceSucre(Grille &g,EnsCoord C);
 void PlaceFourmi(Grille &g,std::vector<Fourmi> F);
-void initialiseGrille(Grille &g,std::vector<Fourmi> F,EnsCoord Sucre,EnsCoord Nid);
+Grille initialiseGrille(std::vector<Fourmi> F,EnsCoord Sucre,EnsCoord Nid);
 void lineariserPheroNid(Grille &g);
 void affichageGrillePheroNid(Grille g);
 

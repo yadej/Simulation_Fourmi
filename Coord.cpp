@@ -145,6 +145,7 @@ EnsCoord voisines(Coord a){
     }
     return Tout;
 }
+
 TEST_CASE("Test voisine"){
     CHECK_THROWS_AS(voisines(Coord{50,50}),invalid_argument);
     CHECK_THROWS_AS(voisines(Coord{-1,10}),invalid_argument);

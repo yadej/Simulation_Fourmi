@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <time.h>
@@ -251,11 +252,12 @@ void PlaceFourmi(Grille &g,std::vector<Fourmi> F){
      }
 }
 
-void initialiseGrille(Grille &g,std::vector<Fourmi> F,EnsCoord Sucre,EnsCoord Nid){
-    g = Grille();
+Grille initialiseGrille(std::vector<Fourmi> F,EnsCoord Sucre,EnsCoord Nid){
+    Grille g = Grille();
     placeNid(g,Nid);
     PlaceSucre(g,Sucre);
     PlaceFourmi(g,F);
+    return g;
 }
 void lineariserPheroNid(Grille &g){
     bool stable = false;
@@ -272,7 +274,7 @@ void lineariserPheroNid(Grille &g){
                         Place p2 = g.chargePlace(Cv);
                         maxPhero = max(maxPhero, p2.get_pheroNid());
                     }
-                    maxPhero = maxPhero - 1./TAILLEGRILLE;
+                    maxPhero = float(maxPhero - 1./TAILLEGRILLE);
                     if(maxPhero > p1.get_pheroNid()){
                         p1.posePheroNid(maxPhero);
                         g.rangePlace(p1);
@@ -283,21 +285,91 @@ void lineariserPheroNid(Grille &g){
         }
     }
 }
+void Grille::diminuePheroSucre(){
+    for(int i=0; i<TAILLEGRILLE;i++){
+        for(int j=0;j<TAILLEGRILLE;j++){
+            Coord C1(i,j);
+            Place p1 = chargePlace(C1);
+            if(!p1.contientSucre()){
+                p1.diminuePheroSucre();
+                rangePlace(p1);
+            }
+}
 void affichageGrillePheroNid(Grille g){
     for(int i=0; i<TAILLEGRILLE;i++){
         for(int j=0;j<TAILLEGRILLE;j++){
             Coord C1(i,j);
             Place p1 =  g.chargePlace(C1);
-            cout<<p1.get_pheroNid()<<" ";
+            cout<<setw(4);
+            cout<<float(int(p1.get_pheroNid()*100))/100<<" ";
         }
         cout<<endl;
     }
 }
 
 
-TEST_CASE("Grille Constructeur"){
-    //A Faire Les Tests
+TEST_CASE("Test constructeur grille"){
+  Grille g = Grille();
+  //affichageGrillePheroNid(g);
+  for(int i = 0; i < g.TailleGrille(); i++){
+    for(int j = 0; j < g.SubTailleGrille(); j++){
+      Place a = g.chargePlace(Coord{i,j});
+      CHECK(a.get_coord() == Coord{i,j});
+      CHECK(a.get_pheroSucre() == 0);
+      CHECK(a.get_pheroNid() == 0);
+      CHECK(estVide(a));
+    }
+  }
+}
+
+TEST_CASE("Test Méthodes Grille"){
+    Grille g = Grille();
     
+    vector<Coord> h =  {{2, 0}, {2, 1}};
+    EnsCoord j = h;
+    placeNid(g, j);
+    lineariserPheroNid(g);
+    //affichageGrillePheroNid(g);
+      /*
+  Place k = g.chargePlace(h[0]);
+  Fourmi f1 = {Coord{h[0]}, 1};
+  Fourmi f2 = {Coord{h[1]}, 2};
+  vector<Fourmi> F = {f1, f2};
+  CHECK_THROWS_AS(placeSucre(g, j), invalid_argument);
+  CHECK_THROWS_AS(placeFourmis(g, F), invalid_argument);
+  CHECK(k.get_pheroNid() == 1);
+  //On va poser des fourmis et les faire se déplacer
+  Fourmi f3 = {Coord{2, 2}, 3};
+  Fourmi f4 = {Coord{1, 1}, 4};
+  vector<Fourmi> F2 = {f3, f4};
+  placeFourmis(g, F2);
+  CHECK(g.chargePlace(Coord{2, 2}).get_numeroFourmi() == 3);
+  CHECK(g.chargePlace(Coord{1, 1}).get_numeroFourmi() == 4);
+  Place P22 = g.chargePlace(Coord{2, 2});
+  Place P105 = g.chargePlace(Coord{10, 5});
+  Place P23 = g.chargePlace(Coord{2, 3});
+  Place P12 = g.chargePlace(Coord{1, 2});
+  Place P11 = g.chargePlace(Coord{1, 1});
+  Place P21 = g.chargePlace(Coord{2, 1});
+  CHECK_THROWS_AS(deplaceFourmi(f3, P22, P105), invalid_argument);// Cases trop éloignées
+  deplaceFourmi(f3, P22, P23);
+  deplaceFourmi(f3, P23, P22);
+  deplaceFourmi(f3, P22, P12);
+  CHECK_THROWS_AS(deplaceFourmi(f3, P12, P11), invalid_argument);//Une fourmi déjà sur ctte case
+  deplaceFourmi(f3, P12, P22);
+  CHECK_THROWS_AS(deplaceFourmi(f3, P22, P21), invalid_argument);// Il y a déjà un Nid en {2, 1}
+  CHECK(P22.get_numeroFourmi() == f3.get_indice());
+  CHECK(P21.get_numeroFourmi() == -1);
+  CHECK(P23.get_numeroFourmi() == -1);
+  CHECK(P12.get_numeroFourmi() == -1);
+  CHECK(P11.get_numeroFourmi() == f4.get_indice());
+  CHECK(P105.get_numeroFourmi() == -1);
+  EnsCoord m = vector<Coord>{P23.get_coord(), P12.get_coord()};
+  placeSucre(g, m);
+  cout << " Sucre: " << P23.contientSucre() << endl;
+  CHECK_THROWS_AS(deplaceFourmi(f3, P21, P22), invalid_argument); //La fourmi f3 n'est pas en {2,1}
+  CHECK_THROWS_AS(deplaceFourmi(f3, P22, P23), invalid_argument); //On a posé du sucre en {2, 3}    
+  */
 }
 
 
