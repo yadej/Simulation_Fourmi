@@ -87,8 +87,21 @@ vector<Fourmi> creeTabFourmi(EnsCoord total){
     }
     return k;
 }
-
-
+TEST_CASE("Test de la fonction creeTabFourmis"){
+  vector<Coord> t = {Coord{0, 0}, Coord{0, 1}, Coord{2, 0}};
+  EnsCoord d = t;
+  vector<Fourmi> G = creeTabFourmis(d);
+  CHECK(G.size() == 3);
+  CHECK(G[0].get_coord() == Coord{0, 0});
+  CHECK(G[1].get_coord() == Coord{0, 1});
+  CHECK(G[2].get_coord() == Coord{2, 0});
+  CHECK(G[0].get_indice() == 0);
+  CHECK(G[1].get_indice() == 1);
+  CHECK(G[2].get_indice() == 2);
+  vector<Coord> s = {Coord{0, 0}, Coord{0, 1}, Coord{0, 0}};
+  EnsCoord e = s;
+  CHECK_THROWS_AS(creeTabFourmis(s), invalid_argument);  
+}
 
 
 
