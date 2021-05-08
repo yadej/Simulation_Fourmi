@@ -89,38 +89,6 @@ vector<Fourmi> creeTabFourmi(EnsCoord total){
 }
 
 
-EnsFourmi::EnsFourmi(Coord a): coord(a){}
-
-void EnsFourmi::creeFourmi(){
-    Fourmi k(coord,Fourmigenere.size());
-    Fourmigenere.push_back(k);
-}
-
-void EnsFourmi::supprimeFourmi(int ind){
-    if(ind<0 or ind>int(Fourmigenere.size()))throw invalid_argument("Indice incorrect");
-    Fourmigenere.erase(Fourmigenere.begin()+ind-1);
-    for(long unsigned int i=0;i<Fourmigenere.size();i++){
-        Fourmigenere[i].newind(i);
-    }
-}
-Fourmi EnsFourmi::iem(int n){
-    if(n<0 or n>int(Fourmigenere.size()))throw invalid_argument("Indice incorrect");
-    return Fourmigenere[n];
-}
-
-EnsCoord EnsFourmi::TotalPosFourmi(){
-    EnsCoord k = EnsCoord();
-    for(long unsigned int i = 0;i < Fourmigenere.size();i++){
-        k.ajoute(Fourmigenere[i].coords());
-    }
-    return k;
-}
-
-
-TEST_CASE("Test EnsFourmi"){
-    //A faire des test
-}
-
 
 
 

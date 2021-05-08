@@ -39,28 +39,8 @@ class Fourmi{
     void newind(int n);
 };
 std::vector<Fourmi> creeTabFourmi(EnsCoord c);
-
 std::ostream &operator<<(std::ostream &out, const Fourmi &fourmi);
 
-class EnsFourmi{
-    Coord coord;
-    std::vector<Fourmi> Fourmigenere;
-    public:
-    //Constructeur
-    //* @param[out] N:l'ensemble de fourmi
-    //* @param[in] a: les coords du nid.
-    EnsFourmi(Coord a);
-    //methode
-    //* Cree une nouvelle fourmi a partir du point de spawn
-    void creeFourmi();
-    //* Supprime une fourmi dans le tableau si une meurt
-    //* @param[in] ind: l'indice du tableau ou la fourmi est
-    void supprimeFourmi(int ind);
-    //* Retourne la Fourmi de l'indice n-1
-    //* @param[in] n: l'indice
-    Fourmi iem(int n);
-    EnsCoord TotalPosFourmi();
-        
-};
+
 
 #endif  
