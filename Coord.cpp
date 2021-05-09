@@ -26,7 +26,9 @@ TEST_CASE("test Coord") {
     CHECK_THROWS_AS(Coord(-2,-6),invalid_argument);
     CHECK_THROWS_AS(Coord(20,60),invalid_argument);
 }
-EnsCoord::EnsCoord(){};
+EnsCoord::EnsCoord(){
+    tab = {};
+};
 
 EnsCoord::EnsCoord(vector<Coord> Ens):tab{Ens}{};
 

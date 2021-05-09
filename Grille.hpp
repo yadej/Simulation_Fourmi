@@ -38,4 +38,7 @@ void Check_Place_Grille(Grille g);
 void Check_Fourmi_Grille(Grille g,std::vector<Fourmi>F);
 void Check_Grille_Fourmi(Grille g,std::vector<Fourmi>F);
 
+//Déplacement De tout la Grille
+void TourGrille(Grille &g,std::vector<Fourmi>&F);
+
 #endif // GRILLE_HPP

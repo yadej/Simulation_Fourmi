@@ -105,6 +105,9 @@ bool estVide(Place p1){
 bool estPlusProcheNid(Place p1, Place p2){
     return (p1.get_pheroNid() > p2.get_pheroNid());
 }
+bool estPlusLoinNid(Place p1, Place p2){
+    return (p1.get_pheroNid() < p2.get_pheroNid());
+}
 
 TEST_CASE("Test des méthodes de la classe abstraite Place"){
   Place p1(Coord{ 2, 2 });

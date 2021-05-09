@@ -259,6 +259,94 @@ TEST_CASE("Test Coherence"){
     CHECK_THROWS_AS(Check_Fourmi_Grille(g,F1),runtime_error);
     
 }
+void TourGrille(Grille &g,std::vector<Fourmi>&F,int &nbSucreNid){
+    g.diminuePheroSucre();
+    Check_Fourmi_Grille(g,F);
+    Check_Grille_Fourmi(g,F);
+    for(size_t i=0; i<F.size();i++){
+        //Cas Si il a un Sucre
+        if(F[i].porteSucre()){
+            Place P1 = g.chargePlace(F[i].coords());
+            EnsCoord k = voisines(F[i].coords());
+            for(Coord a:k.get_tab()){
+                Place P2 = g.chargePlace(a);
+                //Si nid a cote pose le sucre
+                if(P2.contientNid()){
+                    F[i].poseSucre();
+                    nbSucreNid++;
+                    break;
+                }
+            }
+            //Si apres le tour il n'y a toujours pas de nid
+            if(F[i].porteSucre()){
+                for(Coord a:k.get_tab()){
+                    Place P2 = g.chargePlace(a);
+                    //Si la place est pas vide ou le pheronid est trop bas
+                    if(estPlusProcheNid(P1,P2) or !estVide(P2))k.supprime(a);
+                }
+                //Si la Fourmi ne peut pas se rapprocher du nid il ne bouge pas et passe a la case suivante
+                if(k.estVide())continue;
+                Place P2 = g.chargePlace(k.choixHasard());
+                deplaceFourmi(F[i],P1,P2);
+                P2.posePheroSucre();
+                g.rangePlace(P1);
+                g.rangePlace(P2);
+                Check_Fourmi_Grille(g,F);
+                Check_Grille_Fourmi(g,F);
+            }
+            
+         //Cas Fourmi ne portant pas de sucre  
+        }else{
+            Place P1 = g.chargePlace(F[i].coords());
+            EnsCoord k = voisines(F[i].coords());
+            bool estdeplace = false;
+            bool Sucre = false;
+            for(Coord a:k.get_tab()){
+                Place P2 = g.chargePlace(a);
+                //Si la fourmi est a cote d'un sucre
+                if(P2.contientSucre()){
+                    F[i].prendSucre();
+                    P1.posePheroSucre();
+                    g.rangePlace(P1);
+                    break;
+                }
+                if(P1.estSurUnePiste() and P2.estSurUnePiste() and estPlusLoinNid(P1,P2) and estVide(P2)){
+                    deplaceFourmi(F[i],P1,P2);
+                    P2.posePheroSucre();
+                    g.rangePlace(P1);
+                    g.rangePlace(P2);
+                    Check_Fourmi_Grille(g,F);
+                    Check_Grille_Fourmi(g,F);
+                    break;
+                }
+                if(P2.estSurUnePiste())Sucre=true;
+            }
+            if(F[i].porteSucre() or estdeplace)continue;
+            if(Sucre){
+                for(Coord a:k.get_tab()){
+                    Place P2 = g.chargePlace(a);
+                    if(!P2.estSurUnePiste())k.supprime(a);
+                }
+                Place P2 = g.chargePlace(k.choixHasard());
+                deplaceFourmi(F[i],P1,P2);
+                P2.posePheroSucre();
+                g.rangePlace(P1);
+                g.rangePlace(P2);
+                Check_Fourmi_Grille(g,F);
+                Check_Grille_Fourmi(g,F);
+                continue;
+            }
+            Place P2 = g.chargePlace(k.choixHasard());
+                deplaceFourmi(F[i],P1,P2);
+                P2.posePheroSucre();
+                g.rangePlace(P1);
+                g.rangePlace(P2);
+                Check_Fourmi_Grille(g,F);
+                Check_Grille_Fourmi(g,F);
+            
+        }
+    }
+}
 
 
 

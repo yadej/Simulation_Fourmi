@@ -50,5 +50,6 @@ bool estVide(Place p1);
 
 bool estPlusProcheNid(Place p1, Place p2);
 
+bool estPlusLoinNid(Place p1, Place p2);
 
 #endif //PLACE_HPP
