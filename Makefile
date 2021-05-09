@@ -6,8 +6,14 @@ all: tests
 # Regle generique
 tests: tests.o coords.o Fourmi.o Place.o Grille.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
+
+Affichage: Affichage.o coords.o Fourmi.o Place.o Grille.o
+	$(CXX) -o $@ $^ $(LDFLAGS)
         
 tests.o:test.cpp
+	$(CXX) -o $@ -c $< $(CXXFLAGS)
+    
+Affichage.o:ecrfich.cpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
     
 coords.o: Coord.cpp Coord.hpp

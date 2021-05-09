@@ -3,6 +3,14 @@
 #include <sstream>      // pour ostringstream
 #include <fstream>      // pour ofstream
 #include <string>
+#define DOCTEST_CONFIG_IMPLEMENT
+#include "doctest.h"
+#include "Coord.hpp"
+#include "Fourmi.hpp"
+#include "Place.hpp"
+#include "Grille.hpp"
+
+
 
 using namespace std;
 // variable globale permettant de creer des noms de fichiers differents

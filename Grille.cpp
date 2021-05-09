@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <time.h>
 #include <stdlib.h>
+//#define DOCTEST_CONFIG_DISABLE
 #include "doctest.h"
 #include "Coord.hpp"
 #include "Fourmi.hpp"
@@ -167,8 +168,8 @@ TEST_CASE("Test Méthodes Grille"){
   lineariserPheroNid(g);
   affichageGrillePheroNid(g);
   Place k = g.chargePlace(h[0]);
-  Fourmi f1 = {Coord{h[0]}, 1};
-  Fourmi f2 = {Coord{h[1]}, 2};
+  Fourmi f1(Coord{h[0]}, 1);
+  Fourmi f2(Coord{h[1]}, 2);
   vector<Fourmi> F = {f1, f2};
   CHECK_THROWS_AS(placeSucre(g, j), invalid_argument);
   CHECK_THROWS_AS(placeFourmis(g, F), invalid_argument);
@@ -240,6 +241,23 @@ void Check_Grille_Fourmi(Grille g,std::vector<Fourmi>F){
 
 TEST_CASE("Test Coherence"){
     //A Faire
+    Fourmi a(Coord(1,2),0);
+    Fourmi b(Coord(2,2),0);
+    Fourmi c(Coord(3,2),2);
+    vector<Fourmi> F1 = {a,b,c};
+    CHECK_THROWS_AS(Check_Ind_Fourmi(F1),runtime_error);
+    Fourmi d(Coord(4,2),1);
+    vector<Fourmi> F2 = {a,d,c};
+    Check_Ind_Fourmi(F2);
+    Grille g = Grille();
+    placeFourmis(g, F2);
+    Check_Fourmi_Grille(g,F2);
+    CHECK_THROWS_AS(Check_Grille_Fourmi(g,F1),runtime_error);
+    Place P = g.chargePlace(Coord(2,2));
+    P.enleveFourmi();
+    g.rangePlace(P);
+    CHECK_THROWS_AS(Check_Fourmi_Grille(g,F1),runtime_error);
+    
 }
 
 
