@@ -46,7 +46,7 @@ void dessinerDamier(){
   fic.close();
 }
 
-void DessinerGrille(Grille g1){
+void DessinerGrille(Grille g1,int taille){
     int r,g,b;
     ostringstream filename;
     filename << "img" << setfill('0') << setw(3) << compteurFichier << ".ppm";
@@ -55,16 +55,16 @@ void DessinerGrille(Grille g1){
     // ouverture du fichier
     ofstream fic(filename.str(), ios::out | ios::trunc);
      fic << "P3" << endl
-         << TAILLEGRILLE * 4 << " " << TAILLEGRILLE * 4<< " " << endl
+         << TAILLEGRILLE * taille << " " << TAILLEGRILLE * taille<< " " << endl
          << 255 << " " << endl;
      // ecriture des pixels
      for (int i = 0; i < TAILLEGRILLE; i++){
-        //on erit la ligne 4* pour qu'on puisse voir ou sont les choses
-        for(int k=0; k < 4; k++){
+        //on erit la ligne *taille pour qu'on puisse voir ou sont les choses
+        for(int k=0; k < taille; k++){
             for (int j = 0; j < TAILLEGRILLE; j++){
                 Coord k(i,j);
                 Place P = g1.chargePlace(k);
-                for(int a=0;a<4;a++){
+                for(int a=0;a<taille;a++){
                 if(P.contientNid()){
                     r = 0;
                     g = 0;
@@ -106,6 +106,6 @@ int main (){
     placeFourmis(g,F);
     placeSucre(g,S);
     lineariserPheroNid(g);
-    DessinerGrille(g);
+    DessinerGrille(g, 8);
     return 0;
 }
