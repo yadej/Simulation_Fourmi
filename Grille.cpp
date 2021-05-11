@@ -468,36 +468,36 @@ bool chercheSansPiste_condition(Fourmi f, Place P1, Place P2){
   return not(f.porteSucre()) and estVide(P2);   
 }
     
-/*
+
 void mettreAJourEnsFourmi(Grille &g, vector<Fourmi> &F){
-  for(Fourmi f : F){
-    mettreAJourFourmi(g, f);
+  for(size_t i=0;i<F.size();i++){
+    mettreAJourFourmi(g, F[i]);
   }
 }
-*/
-void mettreAJourFourmi(Grille &g, vector<Fourmi> &F){
-    for(size_t k = 0; k<F.size();k++){
-        Coord c = F[k].coords();
+
+void mettreAJourFourmi(Grille &g, /*vector<Fourmi> &F*/Fourmi &F){
+    //for(size_t k = 0; k<F.size();k++){
+        Coord c = F.coords();
         Place P = g.chargePlace(c);
         EnsCoord v = voisines(c);
         cout << "TEST" << endl;
         for(int i = 1; i < 8; i++){
             for(Coord cv : v.get_tab()){
               Place PlaceVoisin = g.chargePlace(cv);
-              if(condition_n(i, F[k], P, PlaceVoisin)){
+              if(condition_n(i, F, P, PlaceVoisin)){
                  for(Coord cv : v.get_tab()){
                      Place PlaceVoisin = g.chargePlace(cv);
-                     if(!condition_n(i, F[k], P, PlaceVoisin))v.supprime(cv);
+                     if(!condition_n(i, F, P, PlaceVoisin))v.supprime(cv);
                  }
                   Place PlaceVoisin = g.chargePlace(v.choixHasard());
-                 action_n(i, F[k], P, PlaceVoisin);
+                 action_n(i, F, P, PlaceVoisin);
                  g.rangePlace(P);
                  g.rangePlace(PlaceVoisin);
                  break;
                   }
             }
           }
-    }
+   // }
 }
 
 bool condition_n(int r, Fourmi f, Place P1, Place P2){
@@ -546,8 +546,9 @@ TEST_CASE("Tour 0 à 1 et plus"){
     placeSucre(g,S);
     g.dessine();
     for(int i=0;i<10;i++){
-        mettreAJourFourmi(g,F);
+        mettreAJourEnsFourmi(g,F);
         g.dessine();
+        g.diminuePheroSucre();
     }
     
    

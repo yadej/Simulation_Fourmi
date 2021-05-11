@@ -96,16 +96,24 @@ int main (){
     Grille g = Grille();
     vector<Coord> h =  {{9, 9}, {9, 10},{10,9},{10,10}};
     vector<Coord> PourF = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
-    //vector<Coord> PourF = {{7,6}};
-    vector<Coord> PourSucre = {{10,2},{10,18},{8,6}};
+    //vector<Coord> PourF = {{7,5}};
+    vector<Coord> PourSucre = {{10,2},{10,18},{6,5}};
     EnsCoord j(h);
     EnsCoord F1(PourF);
     EnsCoord S(PourSucre);
-    vector<Fourmi> F = creeTabFourmi(F1);
     placeNid(g, j);
+    lineariserPheroNid(g);
+    g.affichePheroNid();
+    vector<Fourmi> F = creeTabFourmi(F1);
     placeFourmis(g,F);
     placeSucre(g,S);
-    lineariserPheroNid(g);
+    g.dessine();
     DessinerGrille(g, 8);
+    for(int i=0;i<10;i++){
+        mettreAJourEnsFourmi(g,F);
+        g.dessine();
+        g.diminuePheroSucre();
+        DessinerGrille(g, 8);
+    }
     return 0;
 }
