@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <stdlib.h>
-#define DOCTEST_CONFIG_DISABLE
+//#define DOCTEST_CONFIG_DISABLE
 #include "doctest.h"
 using namespace std;
 #include "Coord.hpp"

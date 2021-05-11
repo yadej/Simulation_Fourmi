@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <time.h>
 #include <stdlib.h>
-#define DOCTEST_CONFIG_DISABLE
+//#define DOCTEST_CONFIG_DISABLE
 #include "doctest.h"
 #include "Coord.hpp"
 #include "Fourmi.hpp"
@@ -133,44 +133,75 @@ void Grille::diminuePheroSucre(){
         }
     }
 }
-void affichageGrillePheroNid(Grille g){
-    for(int i=0; i<TAILLEGRILLE;i++){
+void Grille::dessine(){
+  string ligne = "├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤";
+  string ligneHaut = "┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐";
+  string ligneBas = "└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘";
+  for(int i = 0; i < TAILLEGRILLE; i++){
+    if(i == 0){
+      cout << ligneHaut << endl;   
+    }
+    else{
+      cout << ligne << endl;
+    }
+    for(int j = 0; j < TAILLEGRILLE; j++){
+      Place p = chargePlace(Coord(j, i));
+      if(p.get_numeroFourmi() != -1){
+        cout << "│ f ";   
+      }
+      if(p.contientNid()){
+        cout << "│ N ";   
+      }
+      if(p.contientSucre()){
+        cout << "│ S ";   
+      }
+      if(estVide(p)){
+        cout << "│   ";   
+      }
+    }
+    cout << "│" << endl;
+  }
+  cout << ligneBas << endl;
+}
+
+void Grille::affichePheroSucre(){
+  string ligne = "├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤";
+  string ligneHaut = "┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐";
+  string ligneBas = "└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘";
+  for(int i = 0; i < TAILLEGRILLE; i++){
+    if(i == 0){
+      cout << ligneHaut << endl;   
+    }
+    else{
+      cout << ligne << endl;
+    }
+    for(int j = 0; j < TAILLEGRILLE; j++){
+      Place p = chargePlace(Coord(j, i));
+      cout << "│" << setw(3) << p.get_pheroSucre();
+    }
+    cout << "│" << endl;
+  }
+  cout << ligneBas << endl;
+}
+
+void Grille::affichePheroNid(){
+for(int i=0; i<TAILLEGRILLE;i++){
         for(int j=0;j<TAILLEGRILLE;j++){
             Coord C1(i,j);
-            Place p1 =  g.chargePlace(C1);
+            Place p1 =  chargePlace(C1);
             cout<<setw(4);
             cout<<float(int(p1.get_pheroNid()*100))/100<<" ";
         }
         cout<<endl;
     }
 }
-void affichageGrille(Grille g){
-    for(int i=0; i<TAILLEGRILLE;i++){
-        for(int j=0;j<TAILLEGRILLE;j++){
-            Coord C1(i,j);
-            Place p1 =  g.chargePlace(C1);
-            cout<<setw(4);
-            if(estVide(p1)){
-                cout<<'0';
-            }else if(p1.contientSucre()){
-                cout<<'S';
-            }else if(p1.contientNid()){
-                cout<<'N';
-            }else{
-                cout<<'f';
-            }
-            
-        }
-        cout<<endl;
-    }
-    cout<<endl;
-}
+
 
 
 
 TEST_CASE("Test constructeur grille"){
   Grille g = Grille();
-  //affichageGrillePheroNid(g);
+  //g.affichePheroNid();
   for(int i = 0; i < g.TailleGrille(); i++){
     for(int j = 0; j < g.SubTailleGrille(); j++){
       Place a = g.chargePlace(Coord{i,j});
@@ -188,7 +219,7 @@ TEST_CASE("Test Méthodes Grille"){
   EnsCoord j = h;
   placeNid(g, j);
   lineariserPheroNid(g);
-  //affichageGrillePheroNid(g);
+  //g.affichePheroNid();
   Place k = g.chargePlace(h[0]);
   Fourmi f1(Coord{h[0]}, 1);
   Fourmi f2(Coord{h[1]}, 2);
@@ -224,7 +255,7 @@ TEST_CASE("Test Méthodes Grille"){
   CHECK(P105.get_numeroFourmi() == -1);
   EnsCoord m = vector<Coord>{P23.get_coord(), P12.get_coord()};
   placeSucre(g, m);
-  //affichageGrille(g);
+  //g.dessine();
   //cout << " Sucre: " << P23.contientSucre() << endl;
   CHECK_THROWS_AS(deplaceFourmi(f3, P21, P22), invalid_argument); //La fourmi f3 n'est pas en {2,1}
   CHECK_THROWS_AS(deplaceFourmi(f3, P22, P23), invalid_argument); //On a posé du sucre en {2, 3}    
@@ -283,7 +314,7 @@ TEST_CASE("Test Coherence"){
     CHECK_THROWS_AS(Check_Fourmi_Grille(g,F1),runtime_error);
     
 }
-void MettreAJourFourmi(Grille &g,std::vector<Fourmi>&F,int &nbSucreNid){
+void TourGrille(Grille &g,std::vector<Fourmi>&F,int &nbSucreNid){
     g.diminuePheroSucre();
     Check_Fourmi_Grille(g,F);
     Check_Grille_Fourmi(g,F);
@@ -382,27 +413,145 @@ void MettreAJourFourmi(Grille &g,std::vector<Fourmi>&F,int &nbSucreNid){
     }
     Check_Place_Grille(g);
 }
+void prendSucre(Fourmi &f, Place &P1, Place &P2){
+  f.prendSucre();
+  P1.posePheroSucre();
+}
+
+bool prendSucre_condition(Fourmi f, Place P1, Place P2){
+  return (not(f.porteSucre()) and P2.contientSucre());   
+}
+
+//3)
+void poseSucre(Fourmi &f, Place &P1, Place &P2){ //, int &nbSucreNid à peut etre rajouter
+  f.poseSucre();                              // Dans ce cas la, le rajouter dans le switch
+  //nbSucreNid ++; 
+}
+
+bool poseSucre_condition(Fourmi f, Place P1, Place P2){
+  return f.porteSucre() and P2.contientNid();   
+}
+
+//4)
+void chercheNid(Fourmi &f, Place &P1, Place &P2){
+  deplaceFourmi(f, P1, P2);
+  P2.posePheroSucre();
+}
+
+bool chercheNid_condition(Fourmi f, Place P1, Place P2){
+  return f.porteSucre() and estVide(P2) and estPlusLoinNid(P1,P2);   
+}
+
+//5)
+void chercheSucreSurPiste(Fourmi &f, Place &P1, Place &P2){
+  deplaceFourmi(f, P1, P2);
+}
+
+bool chercheSucreSurPiste_condition(Fourmi f, Place P1, Place P2){
+  return not(f.porteSucre()) and P1.estSurUnePiste() and estVide(P2) and P2.estSurUnePiste() and estPlusLoinNid(P2, P1);
+}
+
+//6)    
+void cherchePiste(Fourmi &f, Place &P1, Place &P2){
+  deplaceFourmi(f, P1, P2);
+}
+
+bool cherchePiste_condition(Fourmi f, Place P1, Place P2){
+ return not(f.porteSucre()) and estVide(P2) and P2.estSurUnePiste();
+}
+
+//7)
+void chercheSansPiste(Fourmi &f, Place &P1, Place &P2){
+  deplaceFourmi(f, P1, P2);
+}
+
+bool chercheSansPiste_condition(Fourmi f, Place P1, Place P2){
+  return not(f.porteSucre()) and estVide(P2);   
+}
+    
+/*
+void mettreAJourEnsFourmi(Grille &g, vector<Fourmi> &F){
+  for(Fourmi f : F){
+    mettreAJourFourmi(g, f);
+  }
+}
+*/
+void mettreAJourFourmi(Grille &g, vector<Fourmi> &F){
+    for(size_t k = 0; k<F.size();k++){
+        Coord c = F[k].coords();
+        Place P = g.chargePlace(c);
+        EnsCoord v = voisines(c);
+        cout << "TEST" << endl;
+        for(int i = 1; i < 8; i++){
+            for(Coord cv : v.get_tab()){
+              Place PlaceVoisin = g.chargePlace(cv);
+              if(condition_n(i, F[k], P, PlaceVoisin)){
+                 for(Coord cv : v.get_tab()){
+                     Place PlaceVoisin = g.chargePlace(cv);
+                     if(!condition_n(i, F[k], P, PlaceVoisin))v.supprime(cv);
+                 }
+                  Place PlaceVoisin = g.chargePlace(v.choixHasard());
+                 action_n(i, F[k], P, PlaceVoisin);
+                 g.rangePlace(P);
+                 g.rangePlace(PlaceVoisin);
+                 return;
+                  }
+            }
+          }
+    }
+}
+
+bool condition_n(int r, Fourmi f, Place P1, Place P2){
+  switch(r) {
+      case 1: return false; break;
+      case 2: return prendSucre_condition(f, P1, P2); break;
+      case 3: return poseSucre_condition(f, P1, P2); break;
+      case 4: return chercheNid_condition(f, P1, P2); break;
+      case 5: return chercheSucreSurPiste_condition(f, P1, P2); break;
+      case 6: return cherchePiste_condition(f, P1, P2); break;
+      case 7: return chercheSansPiste_condition(f, P1, P2); break;
+      default: throw invalid_argument("Regle 1 utlisée, mais pas implantée ou regle inexistante"); break;    
+  }
+}
+
+void action_n(int r, Fourmi &f, Place &P1, Place &P2){
+  switch(r) {
+      //case 1: return false; break;
+      case 2: prendSucre(f, P1, P2); break;
+      case 3: poseSucre(f, P1, P2); break;
+      case 4: chercheNid(f, P1, P2); break;
+      case 5: chercheSucreSurPiste(f, P1, P2); break;
+      case 6: cherchePiste(f, P1, P2); break;
+      case 7: chercheSansPiste(f, P1, P2); break;
+      default: throw invalid_argument("Regle 1 utlisée, mais pas implantée ou regle inexistante"); break;    
+  }
+}
+
+
+
 
 TEST_CASE("Tour 0 à 1 et plus"){
     Grille g = Grille();
     vector<Coord> h =  {{9, 9}, {9, 10},{10,9},{10,10}};
     //vector<Coord> PourF = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
-    vector<Coord> PourF = {{7,6}};
-    vector<Coord> PourSucre = {{10,2},{10,18},{8,6}};
+    vector<Coord> PourF = {{8,6}};
+    vector<Coord> PourSucre = {{10,2},{10,18}/*,{7,6}*/};
     EnsCoord j(h);
     EnsCoord F1(PourF);
     EnsCoord S(PourSucre);
-    int Sucre = 0;
     placeNid(g, j);
     lineariserPheroNid(g);
-    affichageGrillePheroNid(g);
+    g.affichePheroNid();
     vector<Fourmi> F = creeTabFourmi(F1);
     placeFourmis(g,F);
     placeSucre(g,S);
-    Sucre += S.taille();
-    affichageGrille(g);
-    MettreAJourFourmi(g,F,Sucre);
-    affichageGrille(g);
+    g.dessine();
+    mettreAJourFourmi(g,F);
+    g.dessine();
+    mettreAJourFourmi(g,F);
+    g.dessine();
+    mettreAJourFourmi(g,F);
+    g.dessine();
    
 }
 
