@@ -8,13 +8,16 @@
 class Fourmi{
     Coord coord;
     int ind;
+    int colonie;
     bool aSucre;
+    bool Vivant;
     public:
     //Constructeur
     //* @param[out] f : la fourmi
     //* @param[in] a : coordonnee de la fourmi
     //* @param[in] v : son numero
     Fourmi(Coord a,int indice);
+    Fourmi(Coord a,int indice,int colonie);
     //methode
     //* Retourne les coord de la fourmi
     //*  @return : coord
@@ -22,6 +25,9 @@ class Fourmi{
     //* Retourne le numero de la fourmi
     //*  @return : ind
     int num()const;
+    //* Retourne le numero de colonie de la fourmi
+    //*  @return : ind
+    int get_colonie()const;
     //* Test si la fourmi porte du sucre
     //* @return : un booléen selon le résultat du test
     bool porteSucre()const;

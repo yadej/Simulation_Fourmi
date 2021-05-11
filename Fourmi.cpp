@@ -10,6 +10,12 @@ using namespace std;
 
 Fourmi::Fourmi(Coord a,int indice):coord{a},ind{indice}{
     aSucre = false;
+    Vivant = true;
+    colonie = -1;
+}
+Fourmi::Fourmi(Coord a,int indice,int colonie):coord{a},ind{indice},colonie{colonie}{
+    aSucre = false;
+    Vivant = true;
 }
 
 Coord Fourmi::coords()const{
@@ -17,6 +23,9 @@ Coord Fourmi::coords()const{
 }
 int Fourmi::num()const{
     return ind;
+}
+int Fourmi::get_colonie()const{
+    return colonie;
 }
 bool Fourmi::porteSucre()const{
     return aSucre;
