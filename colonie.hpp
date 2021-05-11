@@ -17,6 +17,7 @@ class colonie{
     int nbColonie
     public:
     
+    
 };
 
 #endif
