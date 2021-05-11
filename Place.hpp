@@ -17,7 +17,7 @@ class Place{
   bool sucre;
   bool nid;
   int pheroSucre;
-  float pheroNid;
+  std::vector<float> pheroNid;
 
     
   public:
@@ -28,6 +28,7 @@ class Place{
   Coord get_coord() const;
   int get_pheroSucre() const;
   float get_pheroNid() const;
+  float get_pheroNid(int i) const;
   int get_numeroFourmi() const;
   int get_numeroColonie() const;
   // Prédicats sur une place
@@ -40,7 +41,7 @@ class Place{
   void poseNid();
   void poseFourmi(Fourmi g);
   void enleveFourmi();
-  void posePheroNid(float a);
+  void posePheroNid(float a,int i);
   void posePheroSucre();
   void diminuePheroSucre();
 };

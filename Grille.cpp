@@ -49,7 +49,7 @@ void Grille::rangePlace(Place p){
     Coord k = p.get_coord();
     tab[k.get_lig()][k.get_col()]= p;
 }
-void placeNid(Grille &g,EnsCoord C){
+void placeNid(Grille &g,EnsCoord C,int colonie){
     /*
     for(int i=0;i<C.taille();i++){
         Coord k = C.iem(i);
@@ -62,7 +62,7 @@ void placeNid(Grille &g,EnsCoord C){
          if(g.TailleGrille()<k.get_lig() or g.SubTailleGrille()<k.get_col())throw invalid_argument("Coordonnee pas dans la Grille");
          Place p = g.chargePlace(k);
          p.poseNid();
-         p.posePheroNid(1);
+         p.posePheroNid(1,colonie);
          g.rangePlace(p);
      }
 }
@@ -89,12 +89,12 @@ void placeFourmis(Grille &g,std::vector<Fourmi> F){
 
 Grille initialiseGrille(std::vector<Fourmi> F,EnsCoord Sucre,EnsCoord Nid){
     Grille g = Grille();
-    placeNid(g,Nid);
+    placeNid(g,Nid,0);
     placeSucre(g,Sucre);
     placeFourmis(g,F);
     return g;
 }
-void lineariserPheroNid(Grille &g){
+void lineariserPheroNid(Grille &g,int colonie){
     bool stable = false;
     while(stable == false){
         stable = true;
@@ -107,11 +107,11 @@ void lineariserPheroNid(Grille &g){
                     float maxPhero = 0;
                     for(Coord Cv: voisin.get_tab()){
                         Place p2 = g.chargePlace(Cv);
-                        maxPhero = max(maxPhero, p2.get_pheroNid());
+                        maxPhero = max(maxPhero, p2.get_pheroNid(colonie));
                     }
                     maxPhero = float(maxPhero - 1./TAILLEGRILLE);
                     if(maxPhero > p1.get_pheroNid()){
-                        p1.posePheroNid(maxPhero);
+                        p1.posePheroNid(maxPhero,0);
                         g.rangePlace(p1);
                         stable = false;
                     }
@@ -216,8 +216,8 @@ TEST_CASE("Test Méthodes Grille"){
   Grille g = Grille();
   vector<Coord> h =  {{2, 0}, {2, 1}};
   EnsCoord j = h;
-  placeNid(g, j);
-  lineariserPheroNid(g);
+  placeNid(g, j,0);
+  lineariserPheroNid(g,0);
   //g.affichePheroNid();
   Place k = g.chargePlace(h[0]);
   Fourmi f1(Coord{h[0]}, 1);
@@ -540,8 +540,8 @@ TEST_CASE("Tour 0 à 1 et plus"){
     EnsCoord j(h);
     EnsCoord F1(PourF);
     EnsCoord S(PourSucre);
-    placeNid(g, j);
-    lineariserPheroNid(g);
+    placeNid(g, j,0);
+    lineariserPheroNid(g,0);
     g.affichePheroNid();
     vector<Fourmi> F = creeTabFourmi(F1);
     placeFourmis(g,F);

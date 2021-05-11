@@ -101,8 +101,8 @@ int main (){
     EnsCoord j(h);
     EnsCoord F1(PourF);
     EnsCoord S(PourSucre);
-    placeNid(g, j);
-    lineariserPheroNid(g);
+    placeNid(g, j,0);
+    lineariserPheroNid(g,0);
     g.affichePheroNid();
     vector<Fourmi> F = creeTabFourmi(F1);
     placeFourmis(g,F);

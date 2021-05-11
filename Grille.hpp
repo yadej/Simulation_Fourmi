@@ -33,10 +33,10 @@ class Grille{
 
 };
 
-void placeNid(Grille &g, EnsCoord e);
+void placeNid(Grille &g, EnsCoord e,int colonie);
 void placeSucre(Grille &g, EnsCoord e);
 void placeFourmis(Grille &g, vector<Fourmi> f);
-void lineariserPheroNid(Grille &g);
+void lineariserPheroNid(Grille &g,int colonie);
 Grille initialiseGrille(vector<Fourmi> v, EnsCoord s, EnsCoord n);
 
 //Test Coherence

@@ -18,7 +18,7 @@ Place::Place(Coord c):coord{c}{
     sucre = false;
     nid =false;
     pheroSucre = 0;
-    pheroNid = 0;
+    pheroNid = {0};
 }
 Coord Place::get_coord() const{
     return coord;
@@ -27,7 +27,10 @@ int Place::get_pheroSucre() const{
     return pheroSucre;
 }
 float Place::get_pheroNid() const{
-    return pheroNid;
+    return pheroNid[0];
+}
+float Place::get_pheroNid(int i) const{
+    return pheroNid[i];
 }
 int Place::get_numeroFourmi() const{
     return numeroFourmi;
@@ -78,9 +81,9 @@ void Place::poseFourmi(Fourmi g){
 void Place::enleveFourmi(){
     numeroFourmi =-1;
 }
-void Place::posePheroNid(float a){
+void Place::posePheroNid(float a,int i){
     if(a<0 or a>1)throw invalid_argument("pheroNid doit etre compris entre 0 et 1");
-    pheroNid = a;
+    pheroNid[0] = a;
 }
 void Place::posePheroSucre(){
     pheroSucre = 255;
@@ -148,10 +151,10 @@ TEST_CASE("Test des méthodes de la classe abstraite Place"){
   CHECK(p2.get_pheroSucre() == 0);
   p2.diminuePheroSucre();
   CHECK(p2.get_pheroSucre() == 0);
-  CHECK_THROWS_AS(p2.posePheroNid(2), invalid_argument);
-  CHECK_THROWS_AS(p2.posePheroNid(-2), invalid_argument);
-  CHECK_THROWS_AS(p2.posePheroNid(1.01), invalid_argument);
-  p3.posePheroNid(0.5);
+  CHECK_THROWS_AS(p2.posePheroNid(2,0), invalid_argument);
+  CHECK_THROWS_AS(p2.posePheroNid(-2,0), invalid_argument);
+  CHECK_THROWS_AS(p2.posePheroNid(1.01,0), invalid_argument);
+  p3.posePheroNid(0.5,0);
   CHECK_FALSE(p3.get_pheroNid() == 0);
   CHECK(p3.get_pheroNid() == 0.5);
   Fourmi f1(Coord{2, 0}, 1);
@@ -180,8 +183,8 @@ TEST_CASE("Test des méthodes de la classe abstraite Place"){
   CHECK(estPlusProcheNid(p3, p1));
   CHECK_FALSE(estVide(p3));
   CHECK(estVide(p2));
-  p2.posePheroNid(0.3);
-  p3.posePheroNid(0.1);
+  p2.posePheroNid(0.3,0);
+  p3.posePheroNid(0.1,0);
   CHECK(estPlusProcheNid(p2, p3));
   // à compléter plus tard
 }
