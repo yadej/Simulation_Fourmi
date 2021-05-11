@@ -494,7 +494,7 @@ void mettreAJourFourmi(Grille &g, vector<Fourmi> &F){
                  action_n(i, F[k], P, PlaceVoisin);
                  g.rangePlace(P);
                  g.rangePlace(PlaceVoisin);
-                 return;
+                 break;
                   }
             }
           }
@@ -533,9 +533,9 @@ void action_n(int r, Fourmi &f, Place &P1, Place &P2){
 TEST_CASE("Tour 0 à 1 et plus"){
     Grille g = Grille();
     vector<Coord> h =  {{9, 9}, {9, 10},{10,9},{10,10}};
-    //vector<Coord> PourF = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
-    vector<Coord> PourF = {{8,6}};
-    vector<Coord> PourSucre = {{10,2},{10,18}/*,{7,6}*/};
+    vector<Coord> PourF = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
+    //vector<Coord> PourF = {{7,5}};
+    vector<Coord> PourSucre = {{10,2},{10,18},{6,5}};
     EnsCoord j(h);
     EnsCoord F1(PourF);
     EnsCoord S(PourSucre);
@@ -546,12 +546,11 @@ TEST_CASE("Tour 0 à 1 et plus"){
     placeFourmis(g,F);
     placeSucre(g,S);
     g.dessine();
-    mettreAJourFourmi(g,F);
-    g.dessine();
-    mettreAJourFourmi(g,F);
-    g.dessine();
-    mettreAJourFourmi(g,F);
-    g.dessine();
+    for(int i=0;i<10;i++){
+        mettreAJourFourmi(g,F);
+        g.dessine();
+    }
+    
    
 }
 
