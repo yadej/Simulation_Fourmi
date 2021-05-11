@@ -470,9 +470,11 @@ bool chercheSansPiste_condition(Fourmi f, Place P1, Place P2){
     
 
 void mettreAJourEnsFourmi(Grille &g, vector<Fourmi> &F){
-  for(size_t i=0;i<F.size();i++){
-    mettreAJourFourmi(g, F[i]);
-  }
+    for(size_t i=0;i<F.size();i++){
+      mettreAJourFourmi(g, F[i]);
+      Check_Fourmi_Grille(g,F);
+      Check_Grille_Fourmi(g,F);
+    }
 }
 
 void mettreAJourFourmi(Grille &g, /*vector<Fourmi> &F*/Fourmi &F){
