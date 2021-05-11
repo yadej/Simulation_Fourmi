@@ -5,7 +5,6 @@
 #include <iomanip>
 #include <time.h>
 #include <stdlib.h>
-//#define DOCTEST_CONFIG_DISABLE
 #include "doctest.h"
 #include "Coord.hpp"
 #include "Fourmi.hpp"
