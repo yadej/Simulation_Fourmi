@@ -14,6 +14,7 @@ using namespace std;
 
 Place::Place(Coord c):coord{c}{
     numeroFourmi = -1;
+    numeroColonie = -1;
     sucre = false;
     nid =false;
     pheroSucre = 0;
@@ -30,6 +31,9 @@ float Place::get_pheroNid() const{
 }
 int Place::get_numeroFourmi() const{
     return numeroFourmi;
+}
+int Place::get_numeroColonie() const{
+    return numeroColonie;
 }
 bool Place::contientSucre() const{
     return sucre;

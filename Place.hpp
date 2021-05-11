@@ -13,6 +13,7 @@ class Place{
   // Attribus
   Coord coord;
   int numeroFourmi;
+  int numeroColonie;
   bool sucre;
   bool nid;
   int pheroSucre;
@@ -28,6 +29,7 @@ class Place{
   int get_pheroSucre() const;
   float get_pheroNid() const;
   int get_numeroFourmi() const;
+  int get_numeroColonie() const;
   // Prédicats sur une place
   bool contientSucre() const;
   bool contientNid() const;
