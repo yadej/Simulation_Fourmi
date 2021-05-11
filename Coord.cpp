@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <stdlib.h>
-//#define DOCTEST_CONFIG_DISABLE
+#define DOCTEST_CONFIG_DISABLE
 #include "doctest.h"
 using namespace std;
 
@@ -249,6 +249,7 @@ Coord EnsCoord::choixHasard(){
   if(taille() == 0){
     throw invalid_argument("L'ensemblde de coordonnées est vide");
   }
+  srand (time(NULL));
   int i = rand()%(taille());
   return tab[i];
 }
