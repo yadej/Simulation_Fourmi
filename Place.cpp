@@ -9,6 +9,7 @@
 #include "Coord.hpp"
 #include "Fourmi.hpp"
 #include "Place.hpp"
+#include "colonie.hpp"
 
 using namespace std;
 

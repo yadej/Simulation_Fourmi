@@ -8,6 +8,7 @@
 #include <vector>
 #include "Coord.hpp"
 #include "Fourmi.hpp"
+#include "colonie.hpp"
 
 class Place{
   // Attribus
