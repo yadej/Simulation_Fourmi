@@ -42,10 +42,14 @@ int colonie::get_nbColonie()const{
 
 void colonie::ajoute_colonie(vector<Fourmi> F){
     if(int(C.size())== nbColonie)throw invalid_argument("Toutes les colonies sont déja remplis");
+    for(size_t i=0;i<F.size();i++){
+        F[i].change_colonie(C.size());
+    }
     C.push_back(F);
 }
 void colonie::ajoute_Fourmi(Fourmi F,int ind){
     if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice");
+    F.change_colonie(ind);
     C[ind].push_back(F);
 }
 void colonie::ajoute_Nid_colonie(EnsCoord C){

@@ -47,7 +47,9 @@ TEST_CASE("Test du constructeur des coordonnées"){
     CHECK(k.num()==p);
     CHECK_FALSE(k.porteSucre());
 }
-
+void Fourmi::change_colonie(int i){
+    colonie = i;
+}
 
 void Fourmi::prendSucre(){
     aSucre=true;

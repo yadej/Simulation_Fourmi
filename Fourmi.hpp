@@ -31,6 +31,8 @@ class Fourmi{
     //* Test si la fourmi porte du sucre
     //* @return : un booléen selon le résultat du test
     bool porteSucre()const;
+    //Change le num de colonie
+    void change_colonie(int i);
     //* La fourmi prend un sucre
     void prendSucre();
     //* La fourmi pose un sucre

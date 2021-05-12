@@ -23,7 +23,7 @@ class Grille{
   int SubTailleGrille();
   Place chargePlace(Coord c) const;
   void rangePlace(Place p);
-  void linearisePheroNid();
+  void linearisePheroNid(int ind);
   void diminuePheroSucre();
   //Affichage
   void dessine();
@@ -58,12 +58,12 @@ void poseSucre(Fourmi &f, Place &P1, Place &P2); //, int &nbSucreNid)
 bool poseSucre_condition(Fourmi f, Place P1, Place P2);
 
 //4)
-void chercheNid(Fourmi &f, Place &P1, Place &P2);
-bool chercheNid_condition(Fourmi f, Place P1, Place P2);
+void chercheNid(Fourmi &f, Place &P1, Place &P2,int ind);
+bool chercheNid_condition(Fourmi f, Place P1, Place P2,int ind);
     
 //5)
-void chercheSucreSurPiste(Fourmi &f, Place &P1, Place &P2);
-bool chercheSucreSurPiste_condition(Fourmi f, Place P1, Place P2);
+void chercheSucreSurPiste(Fourmi &f, Place &P1, Place &P2,int ind);
+bool chercheSucreSurPiste_condition(Fourmi f, Place P1, Place P2,int ind);
     
 //6)    
 void cherchePiste(Fourmi &f, Place &P1, Place &P2);
@@ -77,7 +77,7 @@ void mettreAJourEnsFourmi(Grille &g, vector<Fourmi> &F);
 
 void mettreAJourFourmi(Grille &g, Fourmi &f);
 
-bool condition_n(int r, Fourmi f, Place P1, Place P2);
+bool condition_n(int r, Fourmi f, Place P1, Place P2,int ind);
 
 void action_n(int r, Fourmi &f, Place &P1, Place &P2);
 

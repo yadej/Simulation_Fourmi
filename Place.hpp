@@ -24,6 +24,7 @@ class Place{
   public:
   // Constructeur
   Place(Coord c);
+  Place(Coord c,int colonie);
   
   // Methodes
   Coord get_coord() const;
@@ -52,8 +53,8 @@ void deplaceFourmi(Fourmi &f, Place &p1, Place &p2);
 
 bool estVide(Place p1);
 
-bool estPlusProcheNid(Place p1, Place p2);
+bool estPlusProcheNid(Place p1, Place p2,int ind);
 
-bool estPlusLoinNid(Place p1, Place p2);
+bool estPlusLoinNid(Place p1, Place p2,int ind);
 
 #endif //PLACE_HPP

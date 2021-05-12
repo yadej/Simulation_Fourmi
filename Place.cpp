@@ -21,6 +21,16 @@ Place::Place(Coord c):coord{c}{
     pheroSucre = 0;
     pheroNid = {0};
 }
+Place::Place(Coord c,int colonie):coord{c},numeroColonie{colonie}{
+    numeroFourmi = -1;
+    sucre = false;
+    nid =false;
+    pheroSucre = 0;
+    pheroNid = {};
+    for(int i = 0; i<numeroColonie;i++){
+        pheroNid.push_back(0);
+    }
+}
 Coord Place::get_coord() const{
     return coord;
 }
@@ -78,9 +88,13 @@ void Place::poseFourmi(Fourmi g){
     if(contientSucre())throw invalid_argument("Impossible de poser une fourmi sur un sucre");
     if(get_coord()!=g.coords())throw invalid_argument("Coordonnées de Fourmi et place différentes !");
     numeroFourmi = g.num();
+    numeroColonie = g. get_colonie();
 }
 void Place::enleveFourmi(){
-    numeroFourmi =-1;
+    if(numeroFourmi !=-1){
+        numeroFourmi =-1;
+        numeroColonie = -1;
+    }
 }
 void Place::posePheroNid(float a,int i){
     if(a<0 or a>1)throw invalid_argument("pheroNid doit etre compris entre 0 et 1");
@@ -109,11 +123,11 @@ bool estVide(Place p1){
     return(!(p1.contientSucre()) and !(p1.contientNid()) and p1.get_numeroFourmi() == -1);
 }
 
-bool estPlusProcheNid(Place p1, Place p2){
-    return (p1.get_pheroNid() > p2.get_pheroNid());
+bool estPlusProcheNid(Place p1, Place p2,int ind){
+    return (p1.get_pheroNid(ind) > p2.get_pheroNid(ind));
 }
-bool estPlusLoinNid(Place p1, Place p2){
-    return (p1.get_pheroNid() < p2.get_pheroNid());
+bool estPlusLoinNid(Place p1, Place p2,int ind){
+    return (p1.get_pheroNid(ind) < p2.get_pheroNid(ind));
 }
 
 TEST_CASE("Test des méthodes de la classe abstraite Place"){
@@ -180,13 +194,13 @@ TEST_CASE("Test des méthodes de la classe abstraite Place"){
   CHECK(estVide(p1));
   p1.poseNid();
   CHECK(p1.contientNid());
-  CHECK(estPlusProcheNid(p3, p2));
-  CHECK(estPlusProcheNid(p3, p1));
+  CHECK(estPlusProcheNid(p3, p2,0));
+  CHECK(estPlusProcheNid(p3, p1,0));
   CHECK_FALSE(estVide(p3));
   CHECK(estVide(p2));
   p2.posePheroNid(0.3,0);
   p3.posePheroNid(0.1,0);
-  CHECK(estPlusProcheNid(p2, p3));
+  CHECK(estPlusProcheNid(p2, p3,0));
   // à compléter plus tard
 }
 
