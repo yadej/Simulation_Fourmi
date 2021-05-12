@@ -17,7 +17,7 @@ class Grille{
   public:
   // Constructeur
   Grille();
-  
+  Grille(int colonie);
   // Méthodes
   int TailleGrille();
   int SubTailleGrille();
@@ -33,11 +33,11 @@ class Grille{
 
 };
 
-void placeNid(Grille &g, EnsCoord e,int colonie);
+void placeNid(Grille &g, colonie C);
 void placeSucre(Grille &g, EnsCoord e);
-void placeFourmis(Grille &g, vector<Fourmi> f);
+void placeFourmis(Grille &g, colonie C);
 void lineariserPheroNid(Grille &g,int colonie);
-Grille initialiseGrille(vector<Fourmi> v, EnsCoord s, EnsCoord n);
+Grille initialiseGrille(colonie C,EnsCoord Sucre,int colo);
 
 //Test Coherence
 void Check_Ind_Fourmi(std::vector<Fourmi>F);
@@ -47,7 +47,7 @@ void Check_Grille_Fourmi(Grille g,std::vector<Fourmi>F);
 
 //1) //A Faire quand on aura codé les colonies
 void tue(Fourmi &f, Place &P1, Place &P2);
-bool tue_ondition(Fourmi f, Place P1, Place P2);
+bool tue_condition(Fourmi f, Place P1, Place P2);
 
 //2)
 void prendSucre(Fourmi &f, Place &P1, Place &P2);
@@ -55,6 +55,7 @@ bool prendSucre_condition(Fourmi f, Place P1, Place P2);
     
 //3)
 void poseSucre(Fourmi &f, Place &P1, Place &P2); //, int &nbSucreNid)
+void poseSucre(Fourmi &f, Place &P1, Place &P2,colonie &C);// Avec colonie
 bool poseSucre_condition(Fourmi f, Place P1, Place P2);
 
 //4)
@@ -73,14 +74,14 @@ bool cherchePiste_condition(Fourmi f, Place P1, Place P2);
 void chercheSansPiste(Fourmi &f, Place &P1, Place &P2);
 bool chercheSansPiste_condition(Fourmi f, Place P1, Place P2);
 
-void mettreAJourEnsFourmi(Grille &g, vector<Fourmi> &F);
+void mettreAJourFourmiSansColonie(Grille &g,vector<Fourmi> &F);
+void mettreAJourFourmiAvecColonie(Grille &g,colonie &C);
 
-void mettreAJourFourmi(Grille &g, Fourmi &f);
+bool condition_n(int r, Fourmi f, Place P1, Place P2);
 
-bool condition_n(int r, Fourmi f, Place P1, Place P2,int ind);
+void action_n(int r, Fourmi &f, Place &P1, Place &P2,colonie &C);
 
-void action_n(int r, Fourmi &f, Place &P1, Place &P2);
-
+void NouvelleFourmi(Grille &g,colonie &C);
 
 
 #endif // GRILLE_HPP

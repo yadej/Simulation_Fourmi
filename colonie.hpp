@@ -19,15 +19,18 @@ class colonie{
     //Constructeurs
     colonie(int colonie);
     //methodes
+    int taille()const;
+    int Nidtaille()const;
     std::vector<Fourmi> get_colonie_ind(int ind)const;
     int get_Sucre_ind(int ind)const;
     EnsCoord get_coord_Nid(int ind)const;
     int get_nbColonie()const;
     
     void ajoute_colonie(std::vector<Fourmi> F);
-    void ajoute_Fourmi(Fourmi F,int ind);
-    void ajoute_Nid_colonie(EnsCoord C);
+    void ajoute_Fourmi(Coord Ca,int ind);
+    void ajoute_Nid_colonie(EnsCoord Ca);
     void ajoute_Sucre(int ind);
+    bool SucreReset(int ind);
     
 };
 

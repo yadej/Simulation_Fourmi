@@ -31,6 +31,9 @@ class Fourmi{
     //* Test si la fourmi porte du sucre
     //* @return : un booléen selon le résultat du test
     bool porteSucre()const;
+    //* Test si la fourmi est morte
+    //* @return : un booléen selon le résultat du test
+    bool estVivant()const;
     //Change le num de colonie
     void change_colonie(int i);
     //* La fourmi prend un sucre
@@ -45,6 +48,8 @@ class Fourmi{
     //* Change l'indice de la Fourmi
     //* @param[in] n: la nouvelle indice
     void newind(int n);
+    //La Fourmi meurt
+    void meurt();
 };
 std::vector<Fourmi> creeTabFourmi(EnsCoord c);
 std::ostream &operator<<(std::ostream &out, const Fourmi &fourmi);

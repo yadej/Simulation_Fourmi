@@ -21,13 +21,14 @@ Place::Place(Coord c):coord{c}{
     pheroSucre = 0;
     pheroNid = {0};
 }
-Place::Place(Coord c,int colonie):coord{c},numeroColonie{colonie}{
+Place::Place(Coord c,int colonie):coord{c}{
     numeroFourmi = -1;
     sucre = false;
     nid =false;
     pheroSucre = 0;
     pheroNid = {};
-    for(int i = 0; i<numeroColonie;i++){
+    numeroColonie = -1;
+    for(int i = 0; i<colonie;i++){
         pheroNid.push_back(0);
     }
 }
@@ -78,17 +79,18 @@ void Place::poseSucre(){
 void Place::enleveSucre(){
     sucre = false;
 }
-void Place::poseNid(){
+void Place::poseNid(int i){
     if(contientSucre())throw invalid_argument("Impossible de poser un nid sur un sucre"); 
     if(get_numeroFourmi() != -1)throw invalid_argument("Impossible de poser un nid sur une fourmi"); 
     nid = true;
+    numeroColonie = i;
 }
 void Place::poseFourmi(Fourmi g){
     if(contientNid())throw invalid_argument("Impossible de poser une fourmi sur un nid"); 
     if(contientSucre())throw invalid_argument("Impossible de poser une fourmi sur un sucre");
     if(get_coord()!=g.coords())throw invalid_argument("Coordonnées de Fourmi et place différentes !");
     numeroFourmi = g.num();
-    numeroColonie = g. get_colonie();
+    numeroColonie = g.get_colonie();
 }
 void Place::enleveFourmi(){
     if(numeroFourmi !=-1){
@@ -98,7 +100,7 @@ void Place::enleveFourmi(){
 }
 void Place::posePheroNid(float a,int i){
     if(a<0 or a>1)throw invalid_argument("pheroNid doit etre compris entre 0 et 1");
-    pheroNid[0] = a;
+    pheroNid[i] = a;
 }
 void Place::posePheroSucre(){
     pheroSucre = 255;
@@ -152,7 +154,7 @@ TEST_CASE("Test des méthodes de la classe abstraite Place"){
   p1.enleveSucre();
   CHECK_FALSE(p1.contientSucre());
   p1.poseSucre();
-  CHECK_THROWS_AS(p1.poseNid(), invalid_argument);
+  CHECK_THROWS_AS(p1.poseNid(0), invalid_argument);
   CHECK(p2.get_pheroSucre() == 0);
   p2.posePheroSucre();
   CHECK(p2.get_pheroSucre() == 255);
@@ -192,7 +194,7 @@ TEST_CASE("Test des méthodes de la classe abstraite Place"){
   deplaceFourmi(f1, p2, p3);
   p1.enleveSucre();
   CHECK(estVide(p1));
-  p1.poseNid();
+  p1.poseNid(0);
   CHECK(p1.contientNid());
   CHECK(estPlusProcheNid(p3, p2,0));
   CHECK(estPlusProcheNid(p3, p1,0));

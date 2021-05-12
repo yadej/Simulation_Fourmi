@@ -30,6 +30,9 @@ int Fourmi::get_colonie()const{
 bool Fourmi::porteSucre()const{
     return aSucre;
 }
+bool Fourmi::estVivant()const{
+    return Vivant;
+}
 void Fourmi::newind(int n){
     ind=n;
 }
@@ -70,6 +73,9 @@ void Fourmi::deplace(Coord k){
     }else{
         throw invalid_argument("Position trop loin");
     }
+}
+void Fourmi::meurt(){
+    Vivant = false;
 }
 TEST_CASE("Test Méthode prendSucre et PoseSucre + deplace"){
     Coord a(3,5);

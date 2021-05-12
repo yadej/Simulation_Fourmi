@@ -40,7 +40,7 @@ class Place{
   //Modifications sur une place  
   void poseSucre();
   void enleveSucre();
-  void poseNid();
+  void poseNid(int i);
   void poseFourmi(Fourmi g);
   void enleveFourmi();
   void posePheroNid(float a,int i);

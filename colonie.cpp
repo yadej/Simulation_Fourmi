@@ -22,7 +22,12 @@ colonie::colonie(int colonie){
         NSucre.push_back(0);
     }
 }
-
+int colonie::taille()const{
+    return C.size();
+}
+int colonie::Nidtaille()const{
+    return Nid.size();
+}
     
 std::vector<Fourmi> colonie::get_colonie_ind(int ind)const{
     if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice");
@@ -47,18 +52,25 @@ void colonie::ajoute_colonie(vector<Fourmi> F){
     }
     C.push_back(F);
 }
-void colonie::ajoute_Fourmi(Fourmi F,int ind){
+void colonie::ajoute_Fourmi(Coord Ca,int ind){
     if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice");
-    F.change_colonie(ind);
+    Fourmi F = Fourmi(Ca,get_colonie_ind(ind).size(),ind);
     C[ind].push_back(F);
 }
-void colonie::ajoute_Nid_colonie(EnsCoord C){
+void colonie::ajoute_Nid_colonie(EnsCoord Ca){
     if(int(Nid.size())== nbColonie)throw invalid_argument("Toutes les nids de colonies sont déja remplis");
-    Nid.push_back(C);
+    Nid.push_back(Ca);
 }
 void colonie::ajoute_Sucre(int ind){
     if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice");
     NSucre[ind] +=1;
+}
+bool colonie::SucreReset(int ind){
+    if(NSucre[ind] >= 10){
+        NSucre[ind] -= 10;
+        return true;
+    }
+    return false;
 }
 
 TEST_CASE("Constructeur de colonie"){
@@ -71,8 +83,7 @@ TEST_CASE("Constructeur de colonie"){
     k.ajoute_colonie(F);
     CHECK_THROWS_AS(k.ajoute_colonie(F),invalid_argument);
     CHECK(k.get_colonie_ind(0).size()==3);
-    Fourmi A(Coord(4,4),3);
-    k.ajoute_Fourmi(A,0);
+    k.ajoute_Fourmi(Coord(4,4),0);
     CHECK(k.get_colonie_ind(0).size()==4);
     k.ajoute_Nid_colonie(N);
     CHECK(k.get_coord_Nid(0).taille()==4);
