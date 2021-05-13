@@ -116,7 +116,7 @@ void placeFourmis(Grille &g,colonie C){
 }
 
 Grille initialiseGrille(colonie C,EnsCoord Sucre,int colo){
-    if(colo < 1 or colo >= C.get_nbColonie())throw invalid_argument("indice trop haut ou bas");
+    if(colo < 1 or colo > C.get_nbColonie())throw invalid_argument("indice trop haut ou bas");
     Grille g = Grille(colo);
     placeNid(g,C);
     placeSucre(g,Sucre);
@@ -179,7 +179,7 @@ void Grille::dessine(){
       Place p = chargePlace(Coord(j, i));
       if(p.get_numeroFourmi() != -1){
           if(p.get_numeroColonie() != -1){
-              cout << "│ f"<<p.get_numeroColonie();  
+              cout << "│f"<<p.get_numeroColonie()<<" ";  
           }else{
               cout << "│ f ";
           }
@@ -462,7 +462,7 @@ void TourGrille(Grille &g,std::vector<Fourmi>&F,int &nbSucreNid){
 */
 //1)
 void tue(Fourmi &f, Place &P1, Place &P2,colonie &C){
-    C.get_colonie_ind(P2.get_numeroColonie())[P2.get_numeroFourmi()].meurt();
+    C.colonie_Fourmi_meurt(P2.get_numeroColonie(),P2.get_numeroFourmi());
     P2.enleveFourmi();
     deplaceFourmi(f, P1, P2);
 }
@@ -570,11 +570,12 @@ void mettreAJourFourmiSansColonie(Grille &g,vector<Fourmi> &F){
 }
 */
 void mettreAJourFourmiAvecColonie(Grille &g,colonie &C){
-    for(int i =0 ; i<C.get_nbColonie();i++){
-        if(i >= C.taille())throw runtime_error("Pas assez de colonie");
-        vector<Fourmi> F = C.get_colonie_ind(i);
+    for(int j =0 ; j<C.get_nbColonie();j++){
+        if(j >= C.taille())throw runtime_error("Pas assez de colonie");
+        vector<Fourmi> F = C.get_colonie_ind(j);
         if(C.taille()==0)continue;
         for(size_t k = 0; k<F.size();k++){
+            if(!F[k].estVivant())continue;
             Coord c = F[k].coords();
             Place P = g.chargePlace(c);
             EnsCoord v = voisines(c);
@@ -583,11 +584,12 @@ void mettreAJourFourmiAvecColonie(Grille &g,colonie &C){
                 Place PlaceVoisin = g.chargePlace(cv);
                 if(condition_n(i, F[k], P, PlaceVoisin)){
                     for(Coord cv : v.get_tab()){
-                    Place PlaceVoisin = g.chargePlace(cv);
-                    if(!condition_n(i, F[k], P, PlaceVoisin))v.supprime(cv);
+                        Place PlaceVoisin = g.chargePlace(cv);
+                        if(!condition_n(i, F[k], P, PlaceVoisin))v.supprime(cv);
                     }
                     Place PlaceVoisin = g.chargePlace(v.choixHasard());
                     action_n(i, F[k], P, PlaceVoisin,C);
+                    C.colonie_remplace(F,j);
                     g.rangePlace(P);
                     g.rangePlace(PlaceVoisin);
                     break;
@@ -638,6 +640,7 @@ void NouvelleFourmi(Grille &g,colonie &C){
                         C.ajoute_Fourmi(c2,i);
                         int s = C.get_colonie_ind(i).size();
                         P.poseFourmi(C.get_colonie_ind(i)[s-1]);
+                        g.rangePlace(P);
                         break;
                     }
                 }
@@ -677,7 +680,7 @@ TEST_CASE("Grille 2 Colonie"){
     vector<Coord> PourN2 =  {{3, 3}, {3, 4},{4,3},{4,4}};
     vector<Coord> PourF1 = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
     vector<Coord> PourF2 = {{2,2},{2,3},{3,2},{5,5},{5,4},{4,5},{3,5},{4,2},{2,4},{5,2},{2,5},{5,3}};
-    vector<Coord> PourSucre = {{10,2},{10,18},{6,5},};
+    vector<Coord> PourSucre = {{10,2},{10,5},{10,18},{5,10},{7,18},{14,9}};
     EnsCoord N1(PourN1);
     EnsCoord N2(PourN2);
     EnsCoord F1(PourF1);
@@ -691,11 +694,14 @@ TEST_CASE("Grille 2 Colonie"){
     k.ajoute_Nid_colonie(N2);
     Grille g = initialiseGrille(k,S,2);
     g.dessine();
-    for(int i=0;i<10;i++){
+    for(int i=0;i<50;i++){
         mettreAJourFourmiAvecColonie(g,k);
+        NouvelleFourmi(g,k);
+        //Affiche_NbFourmiColonie(k);
         g.dessine();
         g.diminuePheroSucre();
     } 
+    g.dessine();
 }
 
 

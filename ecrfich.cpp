@@ -93,27 +93,32 @@ void DessinerGrille(Grille g1,int taille){
      }
 }
 int main (){
-    Grille g = Grille();
-    vector<Coord> h =  {{9, 9}, {9, 10},{10,9},{10,10}};
-    vector<Coord> PourF = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
-    //vector<Coord> PourF = {{7,5}};
-    vector<Coord> PourSucre = {{10,2},{10,18},{6,5}};
-    EnsCoord j(h);
-    EnsCoord F1(PourF);
+    colonie k = colonie(2);
+    vector<Coord> PourN1 =  {{9, 9}, {9, 10},{10,9},{10,10}};
+    vector<Coord> PourN2 =  {{3, 3}, {3, 4},{4,3},{4,4}};
+    vector<Coord> PourF1 = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
+    vector<Coord> PourF2 = {{2,2},{2,3},{3,2},{5,5},{5,4},{4,5},{3,5},{4,2},{2,4},{5,2},{2,5},{5,3}};
+    vector<Coord> PourSucre = {{10,2},{10,5},{10,18},{5,10},{7,18},{14,9}};
+    EnsCoord N1(PourN1);
+    EnsCoord N2(PourN2);
+    EnsCoord F1(PourF1);
+    EnsCoord F2(PourF2);
     EnsCoord S(PourSucre);
-    placeNid(g, j,0);
-    lineariserPheroNid(g,0);
-    g.affichePheroNid();
-    vector<Fourmi> F = creeTabFourmi(F1);
-    placeFourmis(g,F);
-    placeSucre(g,S);
-    g.dessine();
-    DessinerGrille(g, 8);
-    for(int i=0;i<10;i++){
-        mettreAJourEnsFourmi(g,F);
-        g.dessine();
+    vector<Fourmi> FC1 = creeTabFourmi(F1);
+    vector<Fourmi> FC2 = creeTabFourmi(F2);
+    k.ajoute_colonie(FC1);
+    k.ajoute_colonie(FC2);
+    k.ajoute_Nid_colonie(N1);
+    k.ajoute_Nid_colonie(N2);
+    Grille g = initialiseGrille(k,S,2);
+    //g.dessine();
+    for(int i=0;i<50;i++){
+        mettreAJourFourmiAvecColonie(g,k);
+        NouvelleFourmi(g,k);
+        //Affiche_NbFourmiColonie(k);
+        //g.dessine();
         g.diminuePheroSucre();
-        DessinerGrille(g, 8);
-    }
+    } 
+    g.dessine();
     return 0;
 }

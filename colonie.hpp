@@ -26,13 +26,17 @@ class colonie{
     EnsCoord get_coord_Nid(int ind)const;
     int get_nbColonie()const;
     
+    
     void ajoute_colonie(std::vector<Fourmi> F);
     void ajoute_Fourmi(Coord Ca,int ind);
     void ajoute_Nid_colonie(EnsCoord Ca);
     void ajoute_Sucre(int ind);
+    void colonie_remplace(std::vector<Fourmi> F,int ind);
+    void colonie_Fourmi_meurt(int ind,int pos);
     bool SucreReset(int ind);
     
 };
+void Affiche_NbFourmiColonie(colonie C);
 
 
 #endif

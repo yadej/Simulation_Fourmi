@@ -93,10 +93,9 @@ void Place::poseFourmi(Fourmi g){
     numeroColonie = g.get_colonie();
 }
 void Place::enleveFourmi(){
-    if(numeroFourmi !=-1){
-        numeroFourmi =-1;
-        numeroColonie = -1;
-    }
+   numeroFourmi =-1;
+   numeroColonie = -1;
+    
 }
 void Place::posePheroNid(float a,int i){
     if(a<0 or a>1)throw invalid_argument("pheroNid doit etre compris entre 0 et 1");
@@ -114,6 +113,7 @@ void deplaceFourmi(Fourmi &f, Place &p1, Place &p2){
     if(p2.contientSucre())throw invalid_argument("deja du sucre sur la place"); 
     if(p2.get_numeroFourmi() != -1)throw invalid_argument("deja une fourmi sur la place");
     if(p1.get_numeroFourmi() != f.num())throw invalid_argument("Different ind pour place et fourmi");
+    if(p1.get_numeroColonie() != f.get_colonie())throw invalid_argument("Different ind de colonie pour place et fourmi");
     if(p1.get_coord() != f.coords())throw invalid_argument("Different coord pour place et fourmi");
     f.deplace(p2.get_coord());
     p2.poseFourmi(f);

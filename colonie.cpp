@@ -29,16 +29,16 @@ int colonie::Nidtaille()const{
     return Nid.size();
 }
     
-std::vector<Fourmi> colonie::get_colonie_ind(int ind)const{
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice");
+vector<Fourmi> colonie::get_colonie_ind(int ind)const{
+    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n1");
     return C[ind];
 }
 int colonie::get_Sucre_ind(int ind)const{
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice");
+    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n2");
     return NSucre[ind];
 }
 EnsCoord colonie::get_coord_Nid(int ind)const{
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice");
+    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n3");
     return Nid[ind];
 }
 int colonie::get_nbColonie()const{
@@ -53,7 +53,7 @@ void colonie::ajoute_colonie(vector<Fourmi> F){
     C.push_back(F);
 }
 void colonie::ajoute_Fourmi(Coord Ca,int ind){
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice");
+    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n4");
     Fourmi F = Fourmi(Ca,get_colonie_ind(ind).size(),ind);
     C[ind].push_back(F);
 }
@@ -62,8 +62,17 @@ void colonie::ajoute_Nid_colonie(EnsCoord Ca){
     Nid.push_back(Ca);
 }
 void colonie::ajoute_Sucre(int ind){
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice");
+    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n5");
     NSucre[ind] +=1;
+}
+void colonie::colonie_remplace(vector<Fourmi> F,int ind){
+    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n6");
+    C[ind] = F;
+}
+void colonie::colonie_Fourmi_meurt(int ind,int pos){
+    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n7");
+    if(pos > int(get_colonie_ind(ind).size()))throw invalid_argument("Pos trop grand");
+    C[ind][pos].meurt();
 }
 bool colonie::SucreReset(int ind){
     if(NSucre[ind] >= 10){
@@ -71,6 +80,17 @@ bool colonie::SucreReset(int ind){
         return true;
     }
     return false;
+}
+
+void Affiche_NbFourmiColonie(colonie C){
+    for(int i=0 ;i<C.taille();i++){
+        vector<Fourmi> F = C.get_colonie_ind(i);
+        int k = 0;
+        for(size_t a = 0; a<F.size();a++){
+            if(F[a].estVivant())k++;
+        }
+        cout<<"Colonie n'"<<i<<": "<<k<<" fourmis "<<endl;
+    }
 }
 
 TEST_CASE("Constructeur de colonie"){
@@ -90,7 +110,6 @@ TEST_CASE("Constructeur de colonie"){
     k.ajoute_Sucre(0);
     CHECK(k.get_Sucre_ind(0)==1);
 }
-
 
 
 
