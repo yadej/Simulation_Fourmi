@@ -74,12 +74,9 @@ void colonie::colonie_Fourmi_meurt(int ind,int pos){
     if(pos > int(get_colonie_ind(ind).size()))throw invalid_argument("Pos trop grand");
     C[ind][pos].meurt();
 }
-bool colonie::SucreReset(int ind){
-    if(NSucre[ind] >= 10){
-        NSucre[ind] -= 10;
-        return true;
-    }
-    return false;
+void colonie::SucreReset(int ind){
+    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n8");
+    NSucre[ind] -= 10;
 }
 
 void Affiche_NbFourmiColonie(colonie C){

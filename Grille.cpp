@@ -629,8 +629,9 @@ void action_n(int r, Fourmi &f, Place &P1, Place &P2,colonie &C){
 void NouvelleFourmi(Grille &g,colonie &C){
     for(int i=0;i<C.get_nbColonie();i++){
         bool k = false;
-        if(C.SucreReset(i)){
+        if(C.get_Sucre_ind(i)>=10){
             EnsCoord a = C.get_coord_Nid(i);
+            C.SucreReset(i);
             for(Coord c1:a.get_tab()){
                 EnsCoord PVoisin = voisines(c1);
                 for(Coord c2:PVoisin.get_tab()){

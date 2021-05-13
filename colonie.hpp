@@ -33,7 +33,7 @@ class colonie{
     void ajoute_Sucre(int ind);
     void colonie_remplace(std::vector<Fourmi> F,int ind);
     void colonie_Fourmi_meurt(int ind,int pos);
-    bool SucreReset(int ind);
+    void SucreReset(int ind);
     
 };
 void Affiche_NbFourmiColonie(colonie C);
