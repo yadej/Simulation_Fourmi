@@ -734,17 +734,17 @@ TEST_CASE("Grille 2 Colonie"){
     Grille g = initialiseGrille(k,S,2);
     lineariserPheroNid(g,0);
     lineariserPheroNid(g,1);
-    g.affichePheroNid(0);
-    cout<<endl;
-    g.affichePheroNid(1);
-    //g.dessine();
+    //g.affichePheroNid(0);
+    //cout<<endl;
+    //g.affichePheroNid(1);
+    g.dessine();
     for(int i=0;i<100;i++){
         mettreAJourFourmiAvecColonie(g,k);
         NouvelleFourmi(g,k);
-        //Affiche_NbFourmiColonie(k);
-        //cout<<k.get_Sucre_ind(0)<<endl;
-        //cout<<k.get_Sucre_ind(1)<<endl;
-        //g.dessine();
+        Affiche_NbFourmiColonie(k);
+        cout<<k.get_Sucre_ind(0)<<endl;
+        cout<<k.get_Sucre_ind(1)<<endl;
+        g.dessine();
         g.diminuePheroSucre();
     } 
     //g.dessine();
