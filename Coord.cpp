@@ -20,7 +20,7 @@ TEST_CASE("test Coord") {
     CHECK(k==Coord{5,6});
     CHECK_THROWS_AS(Coord(-2,6),invalid_argument);
     CHECK_THROWS_AS(Coord(2,-6),invalid_argument);
-    CHECK_THROWS_AS(Coord(21,6),invalid_argument);
+    CHECK_THROWS_AS(Coord(60,6),invalid_argument);
     CHECK_THROWS_AS(Coord(2,60),invalid_argument);
     CHECK_THROWS_AS(Coord(-2,-6),invalid_argument);
     CHECK_THROWS_AS(Coord(20,60),invalid_argument);
@@ -152,8 +152,8 @@ TEST_CASE("Test voisine"){
     CHECK_THROWS_AS(voisines(Coord{50,50}),invalid_argument);
     CHECK_THROWS_AS(voisines(Coord{-1,10}),invalid_argument);
     CHECK_THROWS_AS(voisines(Coord{10,-1}),invalid_argument);
-    CHECK_THROWS_AS(voisines(Coord{21,10}),invalid_argument);
-    CHECK_THROWS_AS(voisines(Coord{10,21}),invalid_argument);
+    CHECK_THROWS_AS(voisines(Coord{51,10}),invalid_argument);
+    CHECK_THROWS_AS(voisines(Coord{10,51}),invalid_argument);
 
     // Verifions un milieu
     CHECK(voisines(Coord{10,10}).taille()==8);

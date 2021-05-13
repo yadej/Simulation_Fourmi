@@ -91,6 +91,7 @@ void Affiche_NbFourmiColonie(colonie C){
 }
 
 TEST_CASE("Constructeur de colonie"){
+    srand(time(NULL));
     colonie k = colonie(1);
     EnsCoord N({Coord(1,2),Coord(1,1),Coord(2,1),Coord(2,2)});
     vector<Coord> PourF = {{10,2},{10,18},{6,5}};
@@ -107,8 +108,6 @@ TEST_CASE("Constructeur de colonie"){
     k.ajoute_Sucre(0);
     CHECK(k.get_Sucre_ind(0)==1);
 }
-
-
 
 
 

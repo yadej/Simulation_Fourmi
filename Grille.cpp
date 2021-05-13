@@ -575,6 +575,7 @@ void mettreAJourFourmiSansColonie(Grille &g,vector<Fourmi> &F){
 }
 */
 void mettreAJourFourmiAvecColonie(Grille &g,colonie &C){
+    srand(time(NULL));
     for(int j =0 ; j<C.get_nbColonie();j++){
         if(j >= C.taille())throw runtime_error("Pas assez de colonie");
         vector<Fourmi> F = C.get_colonie_ind(j);
@@ -737,14 +738,14 @@ TEST_CASE("Grille 2 Colonie"){
     //g.affichePheroNid(0);
     //cout<<endl;
     //g.affichePheroNid(1);
-    g.dessine();
+    //g.dessine();
     for(int i=0;i<100;i++){
         mettreAJourFourmiAvecColonie(g,k);
         NouvelleFourmi(g,k);
-        Affiche_NbFourmiColonie(k);
-        cout<<k.get_Sucre_ind(0)<<endl;
-        cout<<k.get_Sucre_ind(1)<<endl;
-        g.dessine();
+        //Affiche_NbFourmiColonie(k);
+        //cout<<k.get_Sucre_ind(0)<<endl;
+        //cout<<k.get_Sucre_ind(1)<<endl;
+        //g.dessine();
         g.diminuePheroSucre();
     } 
     //g.dessine();

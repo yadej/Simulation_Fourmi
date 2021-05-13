@@ -85,10 +85,18 @@ void DessinerGrille(Grille g1,int taille){
                         r = 255;
                         g = 0;
                         b = 0;
-                    }else{// if(P.get_numeroColonie() == 3){
-                        r = 128;
-                        g = 128;
+                    }else if(P.get_numeroColonie() == 2){
+                        r = 255;
+                        g = 255;
                         b = 0;
+                    }else if(P.get_numeroColonie() == 3){
+                        r = 255;
+                        g = 0;
+                        b = 255;
+                    }else{
+                        r = 255;
+                        g = 255;
+                        b = 128;
                     }
                     fic<<r<<" "<<g<<" "<<b<<"  ";
                 }else{
@@ -100,6 +108,14 @@ void DessinerGrille(Grille g1,int taille){
                         r = 128;
                         g = 0;
                         b = 0;
+                    }else if(P.get_pheroSucre(2)>0){
+                        r = 128;
+                        g = 128;
+                        b = 0;
+                    }else if(P.get_pheroSucre(3)>0){
+                        r = 128;
+                        g = 0;
+                        b = 128;
                     }else{
                         r = 0;
                         g = 0;
@@ -114,31 +130,47 @@ void DessinerGrille(Grille g1,int taille){
      }
 }
 int main (){
-    colonie k = colonie(2);
+    colonie k = colonie(4);
     vector<Coord> PourN1 =  {{9, 9}, {9, 10},{10,9},{10,10}};
-    vector<Coord> PourN2 =  {{3, 3}, {3, 4},{4,3},{4,4}};
+    vector<Coord> PourN2 =  {{35, 35}, {34, 35},{35,34},{34,34}};
+    vector<Coord> PourN3 =  {{25, 30}, {24, 30},{25,29},{24,29}};
+    vector<Coord> PourN4 =  {{20, 37}, {21, 37},{20,38},{21,38}};
     vector<Coord> PourF1 = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
-    vector<Coord> PourF2 = {{2,2},{2,3},{3,2},{5,5},{5,4},{4,5},{3,5},{4,2},{2,4},{5,2},{2,5},{5,3}};
-    vector<Coord> PourSucre = {{10,2},{10,5},{10,18},{5,10},{7,18},{14,9},{7,7}};
+    vector<Coord> PourF2 = {{33,33},{33,35},{33,36},{36,33},{35,33},{34,33},{33,34},{36,34},{34,36},{35,36},{36,35},{36,36}};
+    vector<Coord> PourF3 = {{23,28},{23,29},{23,30},{23,31},{24,28},{24,31},{25,31},{25,28},{26,30},{26,28},{26,31},{26,29}};
+    vector<Coord> PourF4 = {{19,36},{19,37},{19,38},{19,39},{20,36},{20,39},{21,36},{21,39},{22,36},{22,37},{22,38},{22,39}};
+    vector<Coord> PourSucre = {{10,2},{10,5},{10,18},{5,10},{7,18},{14,9},{7,7},{25,25},{34,38},{29,40},{27,36},{39,25},{16,25},{40,45},{40,46},{6,45},{15,45},{38,40},{19,45},{41,45}};
     EnsCoord N1(PourN1);
     EnsCoord N2(PourN2);
+    EnsCoord N3(PourN3);
+    EnsCoord N4(PourN4);
     EnsCoord F1(PourF1);
     EnsCoord F2(PourF2);
+    EnsCoord F3(PourF3);
+    EnsCoord F4(PourF4);
     EnsCoord S(PourSucre);
     vector<Fourmi> FC1 = creeTabFourmi(F1);
     vector<Fourmi> FC2 = creeTabFourmi(F2);
+    vector<Fourmi> FC3 = creeTabFourmi(F3);
+    vector<Fourmi> FC4 = creeTabFourmi(F4);
     k.ajoute_colonie(FC1);
     k.ajoute_colonie(FC2);
+    k.ajoute_colonie(FC3);
+    k.ajoute_colonie(FC4);
     k.ajoute_Nid_colonie(N1);
     k.ajoute_Nid_colonie(N2);
-    Grille g = initialiseGrille(k,S,2);
+    k.ajoute_Nid_colonie(N3);
+    k.ajoute_Nid_colonie(N4);
+    Grille g = initialiseGrille(k,S,4);
     lineariserPheroNid(g,0);
     lineariserPheroNid(g,1);
+    lineariserPheroNid(g,2);
+    lineariserPheroNid(g,3);
     //g.dessine();
     for(int i=0;i<100;i++){
         mettreAJourFourmiAvecColonie(g,k);
         NouvelleFourmi(g,k);
-        DessinerGrille(g,8);
+        DessinerGrille(g,4);
         g.diminuePheroSucre();
     } 
     return 0;
