@@ -7,6 +7,7 @@
 #include "doctest.h"
 #include "Coord.hpp"
 #include "Fourmi.hpp"
+#include "colonie.hpp"
 #include "Place.hpp"
 #include "Grille.hpp"
 
@@ -76,14 +77,34 @@ void DessinerGrille(Grille g1,int taille){
                     b = 255;
                     fic<<r<<" "<<g<<" "<<b<<"  ";
                 }else if(P.get_numeroFourmi()!=-1){
-                    r = 0;
-                    g = 255;
-                    b = 0;
+                    if(P.get_numeroColonie() == 0){
+                        r = 0;
+                        g = 255;
+                        b = 0;
+                    }else if(P.get_numeroColonie() == 1){
+                        r = 255;
+                        g = 0;
+                        b = 0;
+                    }else{// if(P.get_numeroColonie() == 3){
+                        r = 128;
+                        g = 128;
+                        b = 0;
+                    }
                     fic<<r<<" "<<g<<" "<<b<<"  ";
                 }else{
-                    r = 0;
-                    g = 0;
-                    b = 0;
+                    if(P.get_pheroSucre(0)>0){
+                        r = 0;
+                        g = 128;
+                        b = 0;
+                    }else if(P.get_pheroSucre(1)>0){
+                        r = 128;
+                        g = 0;
+                        b = 0;
+                    }else{
+                        r = 0;
+                        g = 0;
+                        b = 0;
+                    }
                     fic<<r<<" "<<g<<" "<<b<<"  ";
                 }
                 }
@@ -98,7 +119,7 @@ int main (){
     vector<Coord> PourN2 =  {{3, 3}, {3, 4},{4,3},{4,4}};
     vector<Coord> PourF1 = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
     vector<Coord> PourF2 = {{2,2},{2,3},{3,2},{5,5},{5,4},{4,5},{3,5},{4,2},{2,4},{5,2},{2,5},{5,3}};
-    vector<Coord> PourSucre = {{10,2},{10,5},{10,18},{5,10},{7,18},{14,9}};
+    vector<Coord> PourSucre = {{10,2},{10,5},{10,18},{5,10},{7,18},{14,9},{7,7}};
     EnsCoord N1(PourN1);
     EnsCoord N2(PourN2);
     EnsCoord F1(PourF1);
@@ -111,14 +132,14 @@ int main (){
     k.ajoute_Nid_colonie(N1);
     k.ajoute_Nid_colonie(N2);
     Grille g = initialiseGrille(k,S,2);
+    lineariserPheroNid(g,0);
+    lineariserPheroNid(g,1);
     //g.dessine();
-    for(int i=0;i<50;i++){
+    for(int i=0;i<100;i++){
         mettreAJourFourmiAvecColonie(g,k);
         NouvelleFourmi(g,k);
-        //Affiche_NbFourmiColonie(k);
-        //g.dessine();
+        DessinerGrille(g,8);
         g.diminuePheroSucre();
     } 
-    g.dessine();
     return 0;
 }

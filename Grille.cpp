@@ -121,9 +121,6 @@ Grille initialiseGrille(colonie C,EnsCoord Sucre,int colo){
     placeNid(g,C);
     placeSucre(g,Sucre);
     placeFourmis(g,C);
-    for(int i=0;i<C.get_nbColonie();i++){
-        lineariserPheroNid(g,i);
-    }
     return g;
 }
 void lineariserPheroNid(Grille &g,int colonie){
@@ -134,7 +131,7 @@ void lineariserPheroNid(Grille &g,int colonie){
             for(int j=0;j<TAILLEGRILLE;j++){
                 Coord C1(i,j);
                 Place p1 =  g.chargePlace(C1);
-                if(p1.get_pheroNid()<1){
+                if(p1.get_pheroNid(colonie)<1){
                     EnsCoord voisin = voisines(C1);
                     float maxPhero = 0;
                     for(Coord Cv: voisin.get_tab()){
@@ -142,8 +139,8 @@ void lineariserPheroNid(Grille &g,int colonie){
                         maxPhero = max(maxPhero, p2.get_pheroNid(colonie));
                     }
                     maxPhero = float(maxPhero - 1./TAILLEGRILLE);
-                    if(maxPhero > p1.get_pheroNid()){
-                        p1.posePheroNid(maxPhero,0);
+                    if(maxPhero > p1.get_pheroNid(colonie)){
+                        p1.posePheroNid(maxPhero,colonie);
                         g.rangePlace(p1);
                         stable = false;
                     }
@@ -219,13 +216,13 @@ void Grille::affichePheroSucre(){
   cout << ligneBas << endl;
 }
 
-void Grille::affichePheroNid(){
+void Grille::affichePheroNid(int ind){
 for(int i=0; i<TAILLEGRILLE;i++){
         for(int j=0;j<TAILLEGRILLE;j++){
             Coord C1(i,j);
             Place p1 =  chargePlace(C1);
             cout<<setw(4);
-            cout<<float(int(p1.get_pheroNid()*100))/100<<" ";
+            cout<<float(int(p1.get_pheroNid(ind)*100))/100<<" ";
         }
         cout<<endl;
     }
@@ -462,6 +459,8 @@ void TourGrille(Grille &g,std::vector<Fourmi>&F,int &nbSucreNid){
 */
 //1)
 void tue(Fourmi &f, Place &P1, Place &P2,colonie &C){
+    //cout<< "Regle1" <<endl;
+    if(f.get_colonie()==P2.get_numeroColonie())return;
     C.colonie_Fourmi_meurt(P2.get_numeroColonie(),P2.get_numeroFourmi());
     P2.enleveFourmi();
     deplaceFourmi(f, P1, P2);
@@ -473,10 +472,11 @@ bool tue_condition(Fourmi f, Place P1, Place P2){
  
 //2)
 void prendSucre(Fourmi &f, Place &P1, Place &P2){
+  //cout<< "Regle2" <<endl;
   f.prendSucre();
   P2.diminuePheroSucre();
   if(P2.get_pheroSucre()==0)P2.enleveSucre();
-  P1.posePheroSucre();
+  P1.posePheroSucre(f.get_colonie());
 }
 
 bool prendSucre_condition(Fourmi f, Place P1, Place P2){
@@ -489,6 +489,7 @@ void poseSucre(Fourmi &f, Place &P1, Place &P2){ //, int &nbSucreNid à peut etr
   //nbSucreNid ++; 
 }
 void poseSucre(Fourmi &f, Place &P1, Place &P2,colonie &C){ 
+  //cout<< "Regle3" <<endl;
   f.poseSucre();                              
   C.ajoute_Sucre(f.get_colonie()); 
 }
@@ -499,34 +500,38 @@ bool poseSucre_condition(Fourmi f, Place P1, Place P2){
 
 //4)
 void chercheNid(Fourmi &f, Place &P1, Place &P2){
+  //cout<< "Regle4" <<endl;
   deplaceFourmi(f, P1, P2);
-  P2.posePheroSucre();
+  P2.posePheroSucre(f.get_colonie());
 }
 
-bool chercheNid_condition(Fourmi f, Place P1, Place P2,int ind){
-  return f.porteSucre() and estVide(P2) and estPlusLoinNid(P1,P2,ind);   
+bool chercheNid_condition(Fourmi f, Place P1, Place P2){
+  return f.porteSucre() and estVide(P2) and estPlusLoinNid(P1,P2,f.get_colonie());   
 }
 
 //5)
 void chercheSucreSurPiste(Fourmi &f, Place &P1, Place &P2){
+  //cout<< "Regle5" <<endl;
   deplaceFourmi(f, P1, P2);
 }
 
-bool chercheSucreSurPiste_condition(Fourmi f, Place P1, Place P2,int ind){
-  return not(f.porteSucre()) and P1.estSurUnePiste() and estVide(P2) and P2.estSurUnePiste() and estPlusLoinNid(P2, P1,ind);
+bool chercheSucreSurPiste_condition(Fourmi f, Place P1, Place P2){
+  return not(f.porteSucre()) and P1.estSurUnePiste(f.get_colonie()) and estVide(P2) and P2.estSurUnePiste() and estPlusLoinNid(P2, P1,f.get_colonie());
 }
 
 //6)    
 void cherchePiste(Fourmi &f, Place &P1, Place &P2){
+  //cout<< "Regle6" <<endl;
   deplaceFourmi(f, P1, P2);
 }
 
 bool cherchePiste_condition(Fourmi f, Place P1, Place P2){
- return not(f.porteSucre()) and estVide(P2) and P2.estSurUnePiste();
+ return not(f.porteSucre()) and estVide(P2) and P2.estSurUnePiste(f.get_colonie());
 }
 
 //7)
 void chercheSansPiste(Fourmi &f, Place &P1, Place &P2){
+  //cout<< "Regle7" <<endl;
   deplaceFourmi(f, P1, P2);
 }
 
@@ -575,28 +580,34 @@ void mettreAJourFourmiAvecColonie(Grille &g,colonie &C){
         vector<Fourmi> F = C.get_colonie_ind(j);
         if(C.taille()==0)continue;
         for(size_t k = 0; k<F.size();k++){
+            bool FaitRegle = false;
             if(!F[k].estVivant())continue;
             Coord c = F[k].coords();
             Place P = g.chargePlace(c);
             EnsCoord v = voisines(c);
             for(int i = 1; i < 8; i++){
                 for(Coord cv : v.get_tab()){
-                Place PlaceVoisin = g.chargePlace(cv);
-                if(condition_n(i, F[k], P, PlaceVoisin)){
-                    for(Coord cv : v.get_tab()){
-                        Place PlaceVoisin = g.chargePlace(cv);
-                        if(!condition_n(i, F[k], P, PlaceVoisin))v.supprime(cv);
-                    }
-                    Place PlaceVoisin = g.chargePlace(v.choixHasard());
-                    action_n(i, F[k], P, PlaceVoisin,C);
-                    C.colonie_remplace(F,j);
-                    g.rangePlace(P);
-                    g.rangePlace(PlaceVoisin);
-                    break;
-                    }
+                    Place PlaceVoisin = g.chargePlace(cv);
+                    if(condition_n(i, F[k], P, PlaceVoisin)){
+                        for(Coord cv : v.get_tab()){
+                            Place PlaceVoisin = g.chargePlace(cv);
+                            if(!condition_n(i, F[k], P, PlaceVoisin))v.supprime(cv);
+                        }
+                        Place PlaceVoisin = g.chargePlace(v.choixHasard());
+                        action_n(i, F[k], P, PlaceVoisin,C);
+                    
+                        g.rangePlace(P);
+                        g.rangePlace(PlaceVoisin);
+                        FaitRegle = true;
+                        break;
+                    }      
                 }
+                if(FaitRegle)break;
             }
         }
+        C.colonie_remplace(F,j);
+        Check_Fourmi_Grille(g,C);
+        Check_Grille_Fourmi(g,C);
     }
 }
 
@@ -605,8 +616,8 @@ bool condition_n(int r, Fourmi f, Place P1, Place P2){
       case 1: return tue_condition( f,P1,P2); break;
       case 2: return prendSucre_condition(f, P1, P2); break;
       case 3: return poseSucre_condition(f, P1, P2); break;
-      case 4: return chercheNid_condition(f, P1, P2,f.get_colonie()); break;
-      case 5: return chercheSucreSurPiste_condition(f, P1, P2,f.get_colonie()); break;
+      case 4: return chercheNid_condition(f, P1, P2); break;
+      case 5: return chercheSucreSurPiste_condition(f, P1, P2); break;
       case 6: return cherchePiste_condition(f, P1, P2); break;
       case 7: return chercheSansPiste_condition(f, P1, P2); break;
       default: throw invalid_argument("Regle 1 utlisée, mais pas implantée ou regle inexistante"); break;    
@@ -614,6 +625,7 @@ bool condition_n(int r, Fourmi f, Place P1, Place P2){
 }
 
 void action_n(int r, Fourmi &f, Place &P1, Place &P2,colonie &C){
+  //cout<<f<<endl;
   switch(r) {
       case 1: tue(f,P1,P2,C); break;
       case 2: prendSucre(f, P1, P2); break;
@@ -624,6 +636,7 @@ void action_n(int r, Fourmi &f, Place &P1, Place &P2,colonie &C){
       case 7: chercheSansPiste(f, P1, P2); break;
       default: throw invalid_argument("Regle 1 utlisée, mais pas implantée ou regle inexistante"); break;    
   }
+  //cout<<f<<endl;
 }
 
 void NouvelleFourmi(Grille &g,colonie &C){
@@ -638,9 +651,9 @@ void NouvelleFourmi(Grille &g,colonie &C){
                     Place P = g.chargePlace(c2);
                     if(estVide(P)){
                         k=true;
-                        C.ajoute_Fourmi(c2,i);
                         int s = C.get_colonie_ind(i).size();
-                        P.poseFourmi(C.get_colonie_ind(i)[s-1]);
+                        C.ajoute_Fourmi(c2,i);
+                        P.poseFourmi(C.get_colonie_ind(i)[s]);
                         g.rangePlace(P);
                         break;
                     }
@@ -651,8 +664,9 @@ void NouvelleFourmi(Grille &g,colonie &C){
     }
 }
 
-/*
+
 TEST_CASE("Grille 1 Colonie"){
+    /*
     Grille g = Grille();
     vector<Coord> h =  {{9, 9}, {9, 10},{10,9},{10,10}};
     vector<Coord> PourF = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
@@ -673,9 +687,33 @@ TEST_CASE("Grille 1 Colonie"){
         g.dessine();
         g.diminuePheroSucre();
     } 
+    */
+    colonie k = colonie(1);
+    vector<Coord> PourN1 =  {{9, 9}, {9, 10},{10,9},{10,10}};
+    //vector<Coord> PourF1 = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
+    vector<Coord> PourF1 = {{8,8},{8,9},{9,8},{11,11}};
+    vector<Coord> PourSucre = {{10,2},{10,5},{10,18},{5,10},{7,18},{14,9},{7,7}};
+    EnsCoord N1(PourN1);
+    EnsCoord F1(PourF1);
+    EnsCoord S(PourSucre);
+    vector<Fourmi> FC1 = creeTabFourmi(F1);
+    k.ajoute_colonie(FC1);
+    k.ajoute_Nid_colonie(N1);
+    Grille g = initialiseGrille(k,S,1);
+    lineariserPheroNid(g,0);
+    //g.dessine();
+    for(int i=0;i<30;i++){
+        mettreAJourFourmiAvecColonie(g,k);
+        NouvelleFourmi(g,k);
+        //Affiche_NbFourmiColonie(k);
+        //cout<<k.get_Sucre_ind(0)<<endl;
+        //g.dessine();
+        g.diminuePheroSucre();
+    } 
 }
-*/
+
 TEST_CASE("Grille 2 Colonie"){
+    
     colonie k = colonie(2);
     vector<Coord> PourN1 =  {{9, 9}, {9, 10},{10,9},{10,10}};
     vector<Coord> PourN2 =  {{3, 3}, {3, 4},{4,3},{4,4}};
@@ -694,15 +732,23 @@ TEST_CASE("Grille 2 Colonie"){
     k.ajoute_Nid_colonie(N1);
     k.ajoute_Nid_colonie(N2);
     Grille g = initialiseGrille(k,S,2);
-    g.dessine();
-    for(int i=0;i<50;i++){
+    lineariserPheroNid(g,0);
+    lineariserPheroNid(g,1);
+    g.affichePheroNid(0);
+    cout<<endl;
+    g.affichePheroNid(1);
+    //g.dessine();
+    for(int i=0;i<100;i++){
         mettreAJourFourmiAvecColonie(g,k);
         NouvelleFourmi(g,k);
         //Affiche_NbFourmiColonie(k);
-        g.dessine();
+        //cout<<k.get_Sucre_ind(0)<<endl;
+        //cout<<k.get_Sucre_ind(1)<<endl;
+        //g.dessine();
         g.diminuePheroSucre();
     } 
-    g.dessine();
+    //g.dessine();
+    
 }
 
 

@@ -17,7 +17,7 @@ class Place{
   int numeroColonie;
   bool sucre;
   bool nid;
-  int pheroSucre;
+  std::vector<int> pheroSucre;
   std::vector<float> pheroNid;
 
     
@@ -29,6 +29,7 @@ class Place{
   // Methodes
   Coord get_coord() const;
   int get_pheroSucre() const;
+  int get_pheroSucre(int i) const;
   float get_pheroNid() const;
   float get_pheroNid(int i) const;
   int get_numeroFourmi() const;
@@ -37,6 +38,7 @@ class Place{
   bool contientSucre() const;
   bool contientNid() const;
   bool estSurUnePiste() const;
+  bool estSurUnePiste(int ind) const;
   //Modifications sur une place  
   void poseSucre();
   void enleveSucre();
@@ -45,6 +47,7 @@ class Place{
   void enleveFourmi();
   void posePheroNid(float a,int i);
   void posePheroSucre();
+  void posePheroSucre(int ind);
   void diminuePheroSucre();
 };
 

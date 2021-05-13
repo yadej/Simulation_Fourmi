@@ -7,7 +7,7 @@ all: tests
 tests: tests.o coords.o Fourmi.o Place.o Grille.o colonie.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-Affichage: Affichage.o coords.o Fourmi.o Place.o Grille.o
+Affichage: Affichage.o coords.o Fourmi.o Place.o Grille.o colonie.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
         
 tests.o:test.cpp

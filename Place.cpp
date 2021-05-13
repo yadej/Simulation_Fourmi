@@ -18,25 +18,29 @@ Place::Place(Coord c):coord{c}{
     numeroColonie = -1;
     sucre = false;
     nid =false;
-    pheroSucre = 0;
+    pheroSucre = {0};
     pheroNid = {0};
 }
 Place::Place(Coord c,int colonie):coord{c}{
     numeroFourmi = -1;
     sucre = false;
     nid =false;
-    pheroSucre = 0;
+    pheroSucre = {};
     pheroNid = {};
     numeroColonie = -1;
     for(int i = 0; i<colonie;i++){
         pheroNid.push_back(0);
+        pheroSucre.push_back(0);
     }
 }
 Coord Place::get_coord() const{
     return coord;
 }
 int Place::get_pheroSucre() const{
-    return pheroSucre;
+    return pheroSucre[0];
+}
+int Place::get_pheroSucre(int i) const{
+    return pheroSucre[i];
 }
 float Place::get_pheroNid() const{
     return pheroNid[0];
@@ -57,7 +61,10 @@ bool Place::contientNid() const{
     return nid;
 }
 bool Place::estSurUnePiste() const{
-    if(pheroSucre==0)return false;else return true;
+    if(pheroSucre[0]==0)return false;else return true;
+}
+bool Place::estSurUnePiste(int ind) const{
+    if(pheroSucre[ind]==0)return false;else return true;
 }
 TEST_CASE("Test Constructeur Place"){
     Place p(Coord{3,4});
@@ -74,7 +81,9 @@ void Place::poseSucre(){
     if(contientNid())throw invalid_argument("Impossible de poser du sucre sur un nid");   
     if(get_numeroFourmi() != -1)throw invalid_argument("Impossible de poser du sucre sur une fourmi");   
     sucre = true;
-    pheroSucre = 255;
+    for(size_t i=0;i<pheroSucre.size();i++){
+        pheroSucre[i] = 255;
+    }
 }
 void Place::enleveSucre(){
     sucre = false;
@@ -102,10 +111,15 @@ void Place::posePheroNid(float a,int i){
     pheroNid[i] = a;
 }
 void Place::posePheroSucre(){
-    pheroSucre = 255;
+    pheroSucre[0] = 255;
+}
+void Place::posePheroSucre(int ind){
+    pheroSucre[ind] = 255;
 }
 void Place::diminuePheroSucre(){
-    if(pheroSucre <= 5)pheroSucre = 0;else pheroSucre -= 5;   
+    for(size_t i=0;i<pheroSucre.size();i++){
+        if(pheroSucre[i] <= 5)pheroSucre[i] = 0;else pheroSucre[i] -= 5;   
+    }
 }
 void deplaceFourmi(Fourmi &f, Place &p1, Place &p2){
     Coord k = p1.get_coord();
@@ -118,7 +132,7 @@ void deplaceFourmi(Fourmi &f, Place &p1, Place &p2){
     f.deplace(p2.get_coord());
     p2.poseFourmi(f);
     p1.enleveFourmi();
-
+    if(!estVide(p1))throw runtime_error("LA place ne s'est pas vidé");
 }
 
 bool estVide(Place p1){
