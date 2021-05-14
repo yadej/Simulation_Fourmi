@@ -42,11 +42,11 @@ Grille initialiseGrille(colonie C,EnsCoord Sucre,int colo);
 //Test Coherence
 void Check_Ind_Fourmi(std::vector<Fourmi>F);
 void Check_Place_Grille(Grille g);
-void Check_Fourmi_Grille(Grille g,std::vector<Fourmi>F);
-void Check_Grille_Fourmi(Grille g,std::vector<Fourmi>F);
+void Check_Fourmi_Grille(Grille g,colonie C);
+void Check_Grille_Fourmi(Grille g,colonie C);
 
 //1) //A Faire quand on aura codé les colonies
-void tue(Fourmi &f, Place &P1, Place &P2);
+void tue(Fourmi &f, Place &P1, Place &P2,colonie &C);
 bool tue_condition(Fourmi f, Place P1, Place P2);
 
 //2)
@@ -59,12 +59,12 @@ void poseSucre(Fourmi &f, Place &P1, Place &P2,colonie &C);// Avec colonie
 bool poseSucre_condition(Fourmi f, Place P1, Place P2);
 
 //4)
-void chercheNid(Fourmi &f, Place &P1, Place &P2,int ind);
-bool chercheNid_condition(Fourmi f, Place P1, Place P2,int ind);
+void chercheNid(Fourmi &f, Place &P1, Place &P2);
+bool chercheNid_condition(Fourmi f, Place P1, Place P2);
     
 //5)
-void chercheSucreSurPiste(Fourmi &f, Place &P1, Place &P2,int ind);
-bool chercheSucreSurPiste_condition(Fourmi f, Place P1, Place P2,int ind);
+void chercheSucreSurPiste(Fourmi &f, Place &P1, Place &P2);
+bool chercheSucreSurPiste_condition(Fourmi f, Place P1, Place P2);
     
 //6)    
 void cherchePiste(Fourmi &f, Place &P1, Place &P2);

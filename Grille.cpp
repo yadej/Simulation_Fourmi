@@ -176,9 +176,17 @@ void Grille::dessine(){
       Place p = chargePlace(Coord(j, i));
       if(p.get_numeroFourmi() != -1){
           if(p.get_numeroColonie() != -1){
-              cout << "│f"<<p.get_numeroColonie()<<" ";  
+              if(p.get_pheroSucre(p.get_numeroColonie())==255){
+                  cout << "│F"<<p.get_numeroColonie()<<" ";  
+              }else{
+                  cout << "│f"<<p.get_numeroColonie()<<" ";  
+              }
           }else{
-              cout << "│ f ";
+              if(p.get_pheroSucre(p.get_numeroColonie())==255){
+                  cout << "│ F ";
+              }else{
+                  cout << "│ f ";
+              }
           }
       }
       if(p.contientNid()){

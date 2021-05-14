@@ -100,6 +100,7 @@ void DessinerGrille(Grille g1,int taille){
                     }
                     fic<<r<<" "<<g<<" "<<b<<"  ";
                 }else{
+                    /*
                     if(P.get_pheroSucre(0)>0){
                         r = 0;
                         g = 128;
@@ -121,8 +122,25 @@ void DessinerGrille(Grille g1,int taille){
                         g = 0;
                         b = 0;
                     }
+                    */
+                    int pheroSucreMax = 0;
+                    int colonieMax = -1;
+                    for(int m = 0; m < 4; m++){
+                        if(P.get_pheroSucre(m) > pheroSucreMax){
+                            pheroSucreMax = P.get_pheroSucre(m);
+                            colonieMax = m;
+                        }
+                    }
+                    switch(colonieMax){
+                        case -1: r = 0; g = 0; b = 0; break;
+                        case 0: r = 0; g = int(pheroSucreMax)/2; b = 0; break;
+                        case 1: r = int(pheroSucreMax)/2; g = 0; b = 0; break;
+                        case 2: r = int(pheroSucreMax)/2; g = int(pheroSucreMax)/2; b = 0; break;
+                        case 3: r = int(pheroSucreMax)/2; g = 0; b = int(pheroSucreMax)/2; break;
+                        default: throw runtime_error("Colonie invalide affichage");
+                    }
                     fic<<r<<" "<<g<<" "<<b<<"  ";
-                }
+                    }
                 }
             }
             fic<<endl;
