@@ -110,10 +110,10 @@ namespace SimFourmi{
                 }
                 if(colonieMax==-1)continue;
                 switch(colonieMax){
-                    case 0: TrailShape.setFillColor(sf::Color{ 0, 0,sf::Uint8(pheroSucreMax),128}); break;
-                    case 1: TrailShape.setFillColor(sf::Color{ sf::Uint8(pheroSucreMax), 0, 0 ,128}); break;
-                    case 2: TrailShape.setFillColor(sf::Color{ 0, sf::Uint8(pheroSucreMax), 0 ,128}); break;
-                    case 3: TrailShape.setFillColor(sf::Color{ sf::Uint8(pheroSucreMax),sf::Uint8(pheroSucreMax),0 ,128}); break;
+                    case 0: TrailShape.setFillColor(sf::Color{ 0, 0,sf::Uint8(pheroSucreMax/2)}); break;
+                    case 1: TrailShape.setFillColor(sf::Color{ sf::Uint8(pheroSucreMax/2), 0, 0 }); break;
+                    case 2: TrailShape.setFillColor(sf::Color{ 0, sf::Uint8(pheroSucreMax/2), 0 }); break;
+                    case 3: TrailShape.setFillColor(sf::Color{ sf::Uint8(pheroSucreMax/2),sf::Uint8(pheroSucreMax/2),0}); break;
                     default: throw runtime_error("Colonie invalide affichage");
                 }
                 TrailShape.setPosition(i * CELL_SIZE + 1, j * CELL_SIZE + 1);
@@ -139,6 +139,7 @@ namespace SimFourmi{
 
             }
             mettreAJourFourmiAvecColonie(g,c);
+            NouvelleFourmi(g,c);
             g.diminuePheroSucre();
             drawGrid(window);
             drawTrail(window,g);
