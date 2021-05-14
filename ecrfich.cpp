@@ -125,7 +125,7 @@ void DessinerGrille(Grille g1,int taille){
                     */
                     int pheroSucreMax = 0;
                     int colonieMax = -1;
-                    for(int m = 0; m < 4; m++){
+                    for(int m = 0; m < P.; m++){
                         if(P.get_pheroSucre(m) > pheroSucreMax){
                             pheroSucreMax = P.get_pheroSucre(m);
                             colonieMax = m;

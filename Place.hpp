@@ -28,9 +28,9 @@ class Place{
   
   // Methodes
   Coord get_coord() const;
-  int get_pheroSucre() const;
+  std::vector<int>  get_pheroSucre() const;
   int get_pheroSucre(int i) const;
-  float get_pheroNid() const;
+  std::vector<float>  get_pheroNid() const;
   float get_pheroNid(int i) const;
   int get_numeroFourmi() const;
   int get_numeroColonie() const;

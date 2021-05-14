@@ -36,14 +36,14 @@ Place::Place(Coord c,int colonie):coord{c}{
 Coord Place::get_coord() const{
     return coord;
 }
-int Place::get_pheroSucre() const{
-    return pheroSucre[0];
+vector<int> Place::get_pheroSucre() const{
+    return pheroSucre;
 }
 int Place::get_pheroSucre(int i) const{
     return pheroSucre[i];
 }
-float Place::get_pheroNid() const{
-    return pheroNid[0];
+std::vector<float>  Place::get_pheroNid() const{
+    return pheroNid;
 }
 float Place::get_pheroNid(int i) const{
     return pheroNid[i];
@@ -69,9 +69,9 @@ bool Place::estSurUnePiste(int ind) const{
 TEST_CASE("Test Constructeur Place"){
     Place p(Coord{3,4});
     CHECK(p.get_coord() == Coord{3, 4});
-    CHECK(p.get_pheroSucre() == 0);
+    CHECK(p.get_pheroSucre(0) == 0);
     CHECK(p.get_numeroFourmi() == -1);
-    CHECK(p.get_pheroNid() == 0);
+    CHECK(p.get_pheroNid(0) == 0);
     CHECK_FALSE(p.contientSucre());
     CHECK_FALSE(p.contientNid());
     CHECK_FALSE(p.estSurUnePiste());
@@ -164,30 +164,30 @@ TEST_CASE("Test des méthodes de la classe abstraite Place"){
   CHECK(estVide(p3));
   p1.poseSucre();
   CHECK(p1.contientSucre());
-  CHECK(p1.get_pheroSucre() == 255);
+  CHECK(p1.get_pheroSucre(0) == 255);
   p1.enleveSucre();
   CHECK_FALSE(p1.contientSucre());
   p1.poseSucre();
   CHECK_THROWS_AS(p1.poseNid(0), invalid_argument);
-  CHECK(p2.get_pheroSucre() == 0);
+  CHECK(p2.get_pheroSucre(0) == 0);
   p2.posePheroSucre();
-  CHECK(p2.get_pheroSucre() == 255);
+  CHECK(p2.get_pheroSucre(0) == 255);
   p2.diminuePheroSucre();
-  CHECK(p2.get_pheroSucre() == 250);
+  CHECK(p2.get_pheroSucre(0) == 250);
   for(int i = 0; i < 49; i++){
     p2.diminuePheroSucre();   
   }
-  CHECK(p2.get_pheroSucre() == 5);
+  CHECK(p2.get_pheroSucre(0) == 5);
   p2.diminuePheroSucre();
-  CHECK(p2.get_pheroSucre() == 0);
+  CHECK(p2.get_pheroSucre(0) == 0);
   p2.diminuePheroSucre();
-  CHECK(p2.get_pheroSucre() == 0);
+  CHECK(p2.get_pheroSucre(0) == 0);
   CHECK_THROWS_AS(p2.posePheroNid(2,0), invalid_argument);
   CHECK_THROWS_AS(p2.posePheroNid(-2,0), invalid_argument);
   CHECK_THROWS_AS(p2.posePheroNid(1.01,0), invalid_argument);
   p3.posePheroNid(0.5,0);
-  CHECK_FALSE(p3.get_pheroNid() == 0);
-  CHECK(p3.get_pheroNid() == 0.5);
+  CHECK_FALSE(p3.get_pheroNid(0) == 0);
+  CHECK(p3.get_pheroNid(0) == 0.5);
   Fourmi f1(Coord{2, 0}, 1);
   CHECK_THROWS_AS(p2.poseFourmi(f1), invalid_argument);
   

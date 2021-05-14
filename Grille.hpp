@@ -27,7 +27,7 @@ class Grille{
   void diminuePheroSucre();
   //Affichage
   void dessine();
-  void affichePheroSucre();
+  void affichePheroSucre(int ind);
   void affichePheroNid(int ind);
 
 

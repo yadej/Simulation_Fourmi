@@ -204,7 +204,7 @@ void Grille::dessine(){
   cout << ligneBas << endl;
 }
 
-void Grille::affichePheroSucre(){
+void Grille::affichePheroSucre(int ind){
   string ligne = "├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤";
   string ligneHaut = "┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐";
   string ligneBas = "└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘";
@@ -217,7 +217,7 @@ void Grille::affichePheroSucre(){
     }
     for(int j = 0; j < TAILLEGRILLE; j++){
       Place p = chargePlace(Coord(j, i));
-      cout << "│" << setw(3) << p.get_pheroSucre();
+      cout << "│" << setw(3) << p.get_pheroSucre(ind);
     }
     cout << "│" << endl;
   }
@@ -246,8 +246,8 @@ TEST_CASE("Test constructeur grille"){
     for(int j = 0; j < g.SubTailleGrille(); j++){
       Place a = g.chargePlace(Coord{i,j});
       CHECK(a.get_coord() == Coord{i,j});
-      CHECK(a.get_pheroSucre() == 0);
-      CHECK(a.get_pheroNid() == 0);
+      CHECK(a.get_pheroSucre(0) == 0);
+      CHECK(a.get_pheroNid(0) == 0);
       CHECK(estVide(a));
     }
   }
@@ -266,7 +266,7 @@ TEST_CASE("Test Méthodes Grille"){
   vector<Fourmi> F = {f1, f2};
   CHECK_THROWS_AS(placeSucre(g, j), invalid_argument);
   CHECK_THROWS_AS(placeFourmis(g, F), invalid_argument);
-  CHECK(k.get_pheroNid() == 1);
+  CHECK(k.get_pheroNid(0) == 1);
   //On va poser des fourmis et les faire se déplacer
   Fourmi f3 = {Coord{2, 2}, 3};
   Fourmi f4 = {Coord{1, 1}, 4};
@@ -483,7 +483,7 @@ void prendSucre(Fourmi &f, Place &P1, Place &P2){
   //cout<< "Regle2" <<endl;
   f.prendSucre();
   P2.diminuePheroSucre();
-  if(P2.get_pheroSucre()==0)P2.enleveSucre();
+  if(P2.get_pheroSucre(0)==0)P2.enleveSucre();
   P1.posePheroSucre(f.get_colonie());
 }
 
