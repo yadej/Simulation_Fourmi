@@ -29,6 +29,7 @@ class Grille{
   void dessine();
   void affichePheroSucre(int ind);
   void affichePheroNid(int ind);
+  void ajouteSucreAlea();
 
 
 };

@@ -672,6 +672,24 @@ void NouvelleFourmi(Grille &g,colonie &C){
         }
     }
 }
+void Grille::ajouteSucreAlea(){
+  vector<Coord> c = {};
+  for(int i = 0; i < TAILLEGRILLE; i++){
+      for(int j = 0; j < TAILLEGRILLE; j++){
+          Place p = chargePlace(Coord(i, j));
+          if(estVide(p)){
+              c.push_back(Coord(i, j));
+          }
+      }
+  }
+  EnsCoord v = c;
+  Coord d = v.choixHasard();
+  Place P1 = chargePlace(d);
+  P1.poseSucre();
+  rangePlace(P1);
+}
+
+
 
 
 TEST_CASE("Grille 1 Colonie"){
@@ -755,6 +773,7 @@ TEST_CASE("Grille 2 Colonie"){
         //cout<<k.get_Sucre_ind(1)<<endl;
         //g.dessine();
         g.diminuePheroSucre();
+        if(i%10==0)g.ajouteSucreAlea();
     } 
     //g.dessine();
     
