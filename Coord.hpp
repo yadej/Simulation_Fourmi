@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-const int TAILLEGRILLE = 50;
+const int TAILLEGRILLE = 20;
 
 class Coord{
   // Attribus

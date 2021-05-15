@@ -38,16 +38,10 @@ bool Fourmi::estVivant()const{
 ostream &operator<<(ostream &out, const Fourmi &fourmi){
     out<<"Les coords de la fourmi sont "<<fourmi.coords()<<" et son num est"<<fourmi.num();
     if(fourmi.porteSucre())out<<" et porte du sucre";
+    out << "et elle appartient à la colonie " << fourmi.get_colonie();   
     return out;
 }
-TEST_CASE("Test du constructeur des coordonnées"){
-    Coord a(3,5);
-    int p = 12;
-    Fourmi k(a,p);
-    CHECK(k.coords()==a);
-    CHECK(k.num()==p);
-    CHECK_FALSE(k.porteSucre());
-}
+
 void Fourmi::change_colonie(int i){
     colonie = i;
 }
@@ -69,20 +63,31 @@ void Fourmi::deplace(Coord k){
 void Fourmi::meurt(){
     Vivant = false;
 }
-TEST_CASE("Test Méthode prendSucre et PoseSucre + deplace"){
-    Coord a(3,5);
-    int p = 12;
-    Fourmi k(a,p);
-    CHECK_FALSE(k.porteSucre());
-    //CHECK_FALSE(voisines(k.coords()).contient(a));
-    CHECK_THROWS_AS(k.deplace(Coord(8,8)),invalid_argument);
-    //CHECK(voisines(k.coords()).contient(a));
-    k.prendSucre();
-    CHECK(k.porteSucre());
-    k.poseSucre();
-    CHECK_FALSE(k.porteSucre());
-    
+TEST_CASE("Test du constructeur Fourmi"){
+  Fourmi f(Coord(0, 1), 2, 0);
+  CHECK(f.coords() == Coord(0, 1));
+  CHECK(f.num() == 2);
+  CHECK(f.get_colonie() == 0);
+  CHECK(f.estVivant());
+  CHECK_FALSE(f.get_colonie() == 1);
+  CHECK_FALSE(f.porteSucre());
+  f.prendSucre();
+  CHECK(f.porteSucre());
+  f.poseSucre();
+  CHECK_FALSE(f.porteSucre());
+  f.deplace(Coord(1, 2));
+  CHECK(f.coords() == Coord(1, 2));
+  CHECK_THROWS_AS(f.deplace(Coord(0,0)), invalid_argument);
+  CHECK_FALSE(f.get_colonie() == -1);
+  CHECK(f.get_colonie() == 0);
+  f.change_colonie(1);
+  CHECK_FALSE(f.get_colonie() == 0);
+  CHECK(f.get_colonie() == 1);
+  CHECK(f.estVivant());
+  f.meurt();
+  CHECK_FALSE(f.estVivant());
 }
+
 vector<Fourmi> creeTabFourmi(EnsCoord total){
     for(int m = 0;m<total.taille();m++){
         for(int n=m+1;n<total.taille();n++){
@@ -96,19 +101,22 @@ vector<Fourmi> creeTabFourmi(EnsCoord total){
     return k;
 }
 TEST_CASE("Test de la fonction creeTabFourmis"){
-  vector<Coord> t = {Coord{0, 0}, Coord{0, 1}, Coord{2, 0}};
+  vector<Coord> t = {Coord(0, 0), Coord(0, 1), Coord(2, 0)};
   EnsCoord d = t;
   vector<Fourmi> G = creeTabFourmi(d);
   CHECK(G.size() == 3);
-  CHECK(G[0].coords() == Coord{0, 0});
-  CHECK(G[1].coords() == Coord{0, 1});
-  CHECK(G[2].coords() == Coord{2, 0});
+  CHECK(G[0].coords() == Coord(0, 0));
+  CHECK(G[1].coords() == Coord(0, 1));
+  CHECK(G[2].coords() == Coord(2, 0));
   CHECK(G[0].num() == 0);
   CHECK(G[1].num() == 1);
   CHECK(G[2].num() == 2);
-  vector<Coord> s = {Coord{0, 0}, Coord{0, 1}, Coord{0, 0}};
+  CHECK(G[0].get_colonie() == -1);
+  CHECK(G[1].get_colonie() == -1);
+  CHECK(G[2].get_colonie() == -1);
+  vector<Coord> s = {Coord(0, 0), Coord(0, 1), Coord(0, 0)};
   EnsCoord e = s;
-  CHECK_THROWS_AS(creeTabFourmi(s), invalid_argument);  
+  CHECK_THROWS_AS(creeTabFourmi(s), invalid_argument);
 }
 
 

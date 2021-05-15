@@ -100,32 +100,9 @@ void DessinerGrille(Grille g1,int taille){
                     }
                     fic<<r<<" "<<g<<" "<<b<<"  ";
                 }else{
-                    /*
-                    if(P.get_pheroSucre(0)>0){
-                        r = 0;
-                        g = 128;
-                        b = 0;
-                    }else if(P.get_pheroSucre(1)>0){
-                        r = 128;
-                        g = 0;
-                        b = 0;
-                    }else if(P.get_pheroSucre(2)>0){
-                        r = 128;
-                        g = 128;
-                        b = 0;
-                    }else if(P.get_pheroSucre(3)>0){
-                        r = 128;
-                        g = 0;
-                        b = 128;
-                    }else{
-                        r = 0;
-                        g = 0;
-                        b = 0;
-                    }
-                    */
                     int pheroSucreMax = 0;
                     int colonieMax = -1;
-                    for(int m = 0; m < P.; m++){
+                    for(size_t m = 0; m < P.get_pheroSucre().size(); m++){
                         if(P.get_pheroSucre(m) > pheroSucreMax){
                             pheroSucreMax = P.get_pheroSucre(m);
                             colonieMax = m;
@@ -148,7 +125,16 @@ void DessinerGrille(Grille g1,int taille){
      }
 }
 int main (){
+    srand(time(NULL));
     colonie k = colonie(4);
+     /*
+    vector<Coord> PourN1 =  {{9, 9}, {9, 10},{10,9},{10,10}};
+    vector<Coord> PourN2 =  {{3, 3}, {3, 4},{4,3},{4,4}};
+    vector<Coord> PourF1 = {{8,8},{8,9},{9,8},{11,11},{11,10},{10,11},{9,11},{10,8},{8,10},{11,8},{8,11},{11,9}};
+    vector<Coord> PourF2 = {{2,2},{2,3},{3,2},{5,5},{5,4},{4,5},{3,5},{4,2},{2,4},{5,2},{2,5},{5,3}};
+    vector<Coord> PourSucre = {{10,2},{10,5},{10,18},{5,10},{7,18},{14,9},{7,7}};
+    */
+
     vector<Coord> PourN1 =  {{9, 9}, {9, 10},{10,9},{10,10}};
     vector<Coord> PourN2 =  {{35, 35}, {34, 35},{35,34},{34,34}};
     vector<Coord> PourN3 =  {{25, 30}, {24, 30},{25,29},{24,29}};
@@ -187,6 +173,9 @@ int main (){
     //g.dessine();
     for(int i=0;i<100;i++){
         mettreAJourFourmiAvecColonie(g,k);
+        if(i%20 == 0){
+            g.ajouteSucreAlea();
+        }
         NouvelleFourmi(g,k);
         DessinerGrille(g,4);
         g.diminuePheroSucre();

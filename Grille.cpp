@@ -252,55 +252,38 @@ TEST_CASE("Test constructeur grille"){
     }
   }
 }
-/*
+
 TEST_CASE("Test Méthodes Grille"){
+  colonie C(1);
   Grille g = Grille();
   vector<Coord> h =  {{2, 0}, {2, 1}};
-  EnsCoord j = h;
-  placeNid(g, j,0);
+  EnsCoord j(h);
+  C.ajoute_Nid_colonie(j);
+  placeNid(g, C);
   lineariserPheroNid(g,0);
   //g.affichePheroNid();
   Place k = g.chargePlace(h[0]);
-  Fourmi f1(Coord{h[0]}, 1);
-  Fourmi f2(Coord{h[1]}, 2);
+  Fourmi f1(Coord(h[0]), 1);
+  Fourmi f2(Coord(h[1]), 2);
   vector<Fourmi> F = {f1, f2};
+  CHECK_THROWS_AS(C.ajoute_colonie(F),invalid_argument);
+  Fourmi f5(Coord(h[0]), 0);
+  Fourmi f6(Coord(h[1]), 1);
+  vector<Fourmi> F1 = {f5, f6};
+  C.ajoute_colonie(F1);
   CHECK_THROWS_AS(placeSucre(g, j), invalid_argument);
-  CHECK_THROWS_AS(placeFourmis(g, F), invalid_argument);
+  CHECK_THROWS_AS(placeFourmis(g, C), invalid_argument);
   CHECK(k.get_pheroNid(0) == 1);
   //On va poser des fourmis et les faire se déplacer
-  Fourmi f3 = {Coord{2, 2}, 3};
-  Fourmi f4 = {Coord{1, 1}, 4};
+  Fourmi f3(Coord{2, 2}, 0);
+  Fourmi f4(Coord{1, 1}, 1);
   vector<Fourmi> F2 = {f3, f4};
-  placeFourmis(g, F2);
-  CHECK(g.chargePlace(Coord{2, 2}).get_numeroFourmi() == 3);
-  CHECK(g.chargePlace(Coord{1, 1}).get_numeroFourmi() == 4);
-  Place P22 = g.chargePlace(Coord{2, 2});
-  Place P105 = g.chargePlace(Coord{10, 5});
-  Place P23 = g.chargePlace(Coord{2, 3});
-  Place P12 = g.chargePlace(Coord{1, 2});
-  Place P11 = g.chargePlace(Coord{1, 1});
-  Place P21 = g.chargePlace(Coord{2, 1});
-  CHECK_THROWS_AS(deplaceFourmi(f3, P22, P105), invalid_argument);// Cases trop éloignées
-  deplaceFourmi(f3, P22, P23);
-  deplaceFourmi(f3, P23, P22);
-  deplaceFourmi(f3, P22, P12);
-  CHECK_THROWS_AS(deplaceFourmi(f3, P12, P11), invalid_argument);//Une fourmi déjà sur ctte case
-  deplaceFourmi(f3, P12, P22);
-  CHECK_THROWS_AS(deplaceFourmi(f3, P22, P21), invalid_argument);// Il y a déjà un Nid en {2, 1}
-  CHECK(P22.get_numeroFourmi() == f3.num());
-  CHECK(P21.get_numeroFourmi() == -1);
-  CHECK(P23.get_numeroFourmi() == -1);
-  CHECK(P12.get_numeroFourmi() == -1);
-  CHECK(P11.get_numeroFourmi() == f4.num());
-  CHECK(P105.get_numeroFourmi() == -1);
-  EnsCoord m = vector<Coord>{P23.get_coord(), P12.get_coord()};
-  placeSucre(g, m);
-  //g.dessine();
-  //cout << " Sucre: " << P23.contientSucre() << endl;
-  CHECK_THROWS_AS(deplaceFourmi(f3, P21, P22), invalid_argument); //La fourmi f3 n'est pas en {2,1}
-  CHECK_THROWS_AS(deplaceFourmi(f3, P22, P23), invalid_argument); //On a posé du sucre en {2, 3}    
+  C.colonie_remplace(F2,0);
+  placeFourmis(g, C);
+  CHECK(g.chargePlace(Coord(2, 2)).get_numeroFourmi() == 0);
+  CHECK(g.chargePlace(Coord(1, 1)).get_numeroFourmi() == 1);
 }
-*/
+
 
 void Check_Ind_Fourmi(std::vector<Fourmi>F){
     for(size_t i=0;i < F.size();i++){
@@ -341,130 +324,36 @@ void Check_Grille_Fourmi(Grille g,colonie C){
         }
     }
 }
-/*
+
 TEST_CASE("Test Coherence"){
-    //A Faire
+    colonie c1(1);
+    colonie c2(1);
     Fourmi a(Coord(1,2),0);
     Fourmi b(Coord(2,2),0);
     Fourmi c(Coord(3,2),2);
     vector<Fourmi> F1 = {a,b,c};
     CHECK_THROWS_AS(Check_Ind_Fourmi(F1),runtime_error);
+    Fourmi e(Coord(2,2),1);
+    vector<Fourmi> F3 = {a,e,c};
     Fourmi d(Coord(4,2),1);
     vector<Fourmi> F2 = {a,d,c};
     Check_Ind_Fourmi(F2);
     Grille g = Grille();
     Check_Place_Grille(g);
-    placeFourmis(g, F2);
-    Check_Fourmi_Grille(g,F2);
-    CHECK_THROWS_AS(Check_Grille_Fourmi(g,F1),runtime_error);
-    Place P = g.chargePlace(Coord(2,2));
+    c1.ajoute_colonie(F2);
+    c2.ajoute_colonie(F3);
+    placeFourmis(g, c1);
+    Check_Fourmi_Grille(g,c1);
+    Check_Grille_Fourmi(g,c1);
+    CHECK_THROWS_AS(Check_Grille_Fourmi(g,c2),runtime_error);
+    Place P = g.chargePlace(Coord(3,2));
     P.enleveFourmi();
     g.rangePlace(P);
-    CHECK_THROWS_AS(Check_Fourmi_Grille(g,F1),runtime_error);
-    
+    CHECK_THROWS_AS(Check_Fourmi_Grille(g,c1),runtime_error);
+  
 }
-*/
-/*
-void TourGrille(Grille &g,std::vector<Fourmi>&F,int &nbSucreNid){
-    g.diminuePheroSucre();
-    Check_Fourmi_Grille(g,F);
-    Check_Grille_Fourmi(g,F);
-    Check_Place_Grille(g);
-    for(size_t i=0; i<F.size();i++){
-        
-        Place P1 = g.chargePlace(F[i].coords());
-        EnsCoord k = voisines(F[i].coords());
-        //Cas Si il a un Sucre
-        if(!F[i].porteSucre()){
-            for(Coord a:k.get_tab()){
-                Place P2 = g.chargePlace(a);
-                //Si nid a cote pose le sucre
-                //Regle 3
-                if(P2.contientNid()){
-                    F[i].poseSucre();
-                    nbSucreNid++;
-                    break;
-                }
-            }
-            //Si apres le tour il n'y a toujours pas de nid
-            //Regle 4
-            if(F[i].porteSucre()){
-                for(Coord a:k.get_tab()){
-                    Place P2 = g.chargePlace(a);
-                    //Si la place est pas vide ou le pheronid est trop bas
-                    if(estPlusProcheNid(P1,P2,0) or !estVide(P2))k.supprime(a);
-                }
-                //Si la Fourmi ne peut pas se rapprocher du nid il ne bouge pas et passe a la case suivante
-                cout<<k<<endl;
-                if(k.estVide())continue;
-                Place P2 = g.chargePlace(k.choixHasard());
-                deplaceFourmi(F[i],P1,P2);
-                P2.posePheroSucre();
-                g.rangePlace(P1);
-                g.rangePlace(P2);
-                Check_Fourmi_Grille(g,F);
-                Check_Grille_Fourmi(g,F);
-            }
-            
-         //Cas Fourmi ne portant pas de sucre  
-        }else{
-            bool Sucre = false;
-            for(Coord a:k.get_tab()){
-                Place P2 = g.chargePlace(a);
-                //Si la fourmi est a cote d'un sucre
-                //Regle 2
-                if(P2.contientSucre()){
-                    F[i].prendSucre();
-                    P1.posePheroSucre();
-                    g.rangePlace(P1);
-                    break;
-                }
-                //Regle 5
-                if(P1.estSurUnePiste() and P2.estSurUnePiste() and estPlusLoinNid(P1,P2,0) and estVide(P2)){
-                    deplaceFourmi(F[i],P1,P2);
-                    P2.posePheroSucre();
-                    g.rangePlace(P1);
-                    g.rangePlace(P2);
-                    Check_Fourmi_Grille(g,F);
-                    Check_Grille_Fourmi(g,F);
-                    break;
-                }
-                if(P2.estSurUnePiste())Sucre=true;
-            }
-            if(F[i].porteSucre())continue;
-            //Regle 6
-            if(Sucre){
-                for(Coord a:k.get_tab()){
-                    Place P2 = g.chargePlace(a);
-                    if(!P2.estSurUnePiste() or !estVide(P2))k.supprime(a);
-                }
-                Place P2 = g.chargePlace(k.choixHasard());
-                deplaceFourmi(F[i],P1,P2);
-                P2.posePheroSucre();
-                g.rangePlace(P1);
-                g.rangePlace(P2);
-                Check_Fourmi_Grille(g,F);
-                Check_Grille_Fourmi(g,F);
-                continue;
-            }
-            //Regle 7
-            for(Coord a:k.get_tab()){
-                Place P2 = g.chargePlace(a);
-                if(!estVide(P2))k.supprime(a);
-            }
-            Place P2 = g.chargePlace(k.choixHasard());
-            deplaceFourmi(F[i],P1,P2);
-            P2.posePheroSucre();
-            g.rangePlace(P1);
-            g.rangePlace(P2);
-            Check_Fourmi_Grille(g,F);
-            Check_Grille_Fourmi(g,F);
-            
-        }
-    }
-    Check_Place_Grille(g);
-}
-*/
+
+
 //1)
 void tue(Fourmi &f, Place &P1, Place &P2,colonie &C){
     //cout<< "Regle1" <<endl;
@@ -651,9 +540,8 @@ void action_n(int r, Fourmi &f, Place &P1, Place &P2,colonie &C){
 void NouvelleFourmi(Grille &g,colonie &C){
     for(int i=0;i<C.get_nbColonie();i++){
         bool k = false;
-        if(C.get_Sucre_ind(i)>=10){
+        if(C.SucreReset(i)){
             EnsCoord a = C.get_coord_Nid(i);
-            C.SucreReset(i);
             for(Coord c1:a.get_tab()){
                 EnsCoord PVoisin = voisines(c1);
                 for(Coord c2:PVoisin.get_tab()){
@@ -764,16 +652,16 @@ TEST_CASE("Grille 2 Colonie"){
     //g.affichePheroNid(0);
     //cout<<endl;
     //g.affichePheroNid(1);
-    //g.dessine();
+    g.dessine();
     for(int i=0;i<100;i++){
         mettreAJourFourmiAvecColonie(g,k);
         NouvelleFourmi(g,k);
-        //Affiche_NbFourmiColonie(k);
+       // Affiche_NbFourmiColonie(k);
         //cout<<k.get_Sucre_ind(0)<<endl;
         //cout<<k.get_Sucre_ind(1)<<endl;
         //g.dessine();
         g.diminuePheroSucre();
-        if(i%10==0)g.ajouteSucreAlea();
+        if(i%20==0)g.ajouteSucreAlea();
     } 
     //g.dessine();
     

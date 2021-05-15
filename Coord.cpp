@@ -20,10 +20,10 @@ TEST_CASE("test Coord") {
     CHECK(k==Coord{5,6});
     CHECK_THROWS_AS(Coord(-2,6),invalid_argument);
     CHECK_THROWS_AS(Coord(2,-6),invalid_argument);
-    CHECK_THROWS_AS(Coord(60,6),invalid_argument);
-    CHECK_THROWS_AS(Coord(2,60),invalid_argument);
+    CHECK_THROWS_AS(Coord(TAILLEGRILLE,6),invalid_argument);
+    CHECK_THROWS_AS(Coord(2,TAILLEGRILLE),invalid_argument);
     CHECK_THROWS_AS(Coord(-2,-6),invalid_argument);
-    CHECK_THROWS_AS(Coord(20,60),invalid_argument);
+    CHECK_THROWS_AS(Coord(20,TAILLEGRILLE),invalid_argument);
 }
 EnsCoord::EnsCoord(){
     tab = {};
@@ -56,6 +56,16 @@ int EnsCoord::Position(Coord c)const{
 ostream& operator<<(ostream &out, Coord c){
     return out<<"("<<c.get_lig()<<","<<c.get_col()<<")"<<endl;
 }
+void testAffichageCoordonnees(){
+  int a, b;
+  cout << "Saisissez une valeur pour la ligne de la coordonnée: " << endl;
+  cin >> a;
+  cout << "Saisissez une valeur pour la colonne de la coordonnée: " << endl;
+  cin >> b;
+  Coord c = {a, b};
+  cout << "Affichage des coordonnées: " << c << endl;
+}
+
 std::ostream& EnsCoord::print(std::ostream& out) const{
     for(size_t i=0;i<tab.size();i++){
         out<<tab[i];
@@ -81,11 +91,38 @@ bool operator!=(const Coord& a, const Coord& b){
     return !(a==b);
 }
 
-//Fonction
+TEST_CASE("Test des operateurs == et != de coordonnées"){
+  Coord a = {1, 2};
+  Coord b = {1, 2};
+  Coord c = {1, 3};
+  Coord d = {5, 2};
+  CHECK(a==a);
+  CHECK(b==b);
+  CHECK(c==c);
+  CHECK(d==d);
+  CHECK_FALSE(a!=b);
+  CHECK_FALSE(a==c);
+  CHECK(a!=d);   
+}
+
 
 bool EnsCoord::contient(Coord c)const{
     if(Position(c)==-1)return false;else return true;
 }
+TEST_CASE("Méthode contient"){
+  Coord a(1, 2);
+  Coord b(1, 4);
+  Coord c(1, 3);
+  Coord d(5, 2);
+  EnsCoord e({a, b, c, d});
+  CHECK(e.contient(a));
+  CHECK(e.contient(b));
+  CHECK(e.contient(c));
+  CHECK(e.contient(d));
+  CHECK_FALSE(e.contient(Coord{4, 5}));
+}
+
+
 void EnsCoord::ajoute(Coord c){
     if(!contient(c))tab.push_back(c);
 }
@@ -104,7 +141,39 @@ Coord EnsCoord::iem(int n)const{
     if(n<0 or n>int(tab.size())-1)throw invalid_argument("Indice incorrect");
     return tab[n];
 }
-TEST_CASE("test EnsCoord") {
+TEST_CASE("Méthodes ajoute, supprime, estVide, taille et iem"){
+  vector<Coord> r = {};
+  EnsCoord e = r;
+  CHECK(e.taille() == 0);
+  CHECK_THROWS_AS(e.iem(0), invalid_argument);
+  CHECK(e.estVide());
+  CHECK_THROWS_AS(e.supprime({1, 0}), invalid_argument);
+  e.ajoute({1, 4});
+  CHECK(e.taille() == 1);
+  CHECK(e.iem(0) == Coord{1,4});
+  CHECK_FALSE(e.estVide());
+  e.ajoute({1, 4});
+  CHECK_THROWS_AS(e.iem(1), invalid_argument);
+  CHECK(e.taille() == 1);
+  e.ajoute({2, 4});
+  CHECK(e.taille() == 2);
+  CHECK(e.iem(0) == Coord{1, 4});
+  CHECK(e.iem(1) == Coord{2, 4});
+  CHECK_FALSE(e.estVide());
+  CHECK_THROWS_AS(e.iem(-1), invalid_argument);
+  e.supprime({1, 4});
+  CHECK(e.taille() == 1);
+  CHECK(e.iem(0) == Coord{2, 4});
+  CHECK_FALSE(e.estVide());
+  e.supprime({2, 4});
+  CHECK(e.estVide());
+  CHECK(e.taille() == 0);
+  CHECK_THROWS_AS(e.supprime({1, 4}), invalid_argument);
+  CHECK_THROWS_AS(e.iem(0), invalid_argument);
+
+}
+
+TEST_CASE("test EnsCoord 2") {
     EnsCoord b({Coord(1,6),Coord(2,6),Coord(3,6),Coord(4,6)});
     CHECK(b.taille()==4);
     CHECK(b.iem(0)==Coord{1,6});
@@ -152,11 +221,11 @@ EnsCoord voisines(Coord a){
 }
 
 TEST_CASE("Test voisine"){
-    CHECK_THROWS_AS(voisines(Coord{50,50}),invalid_argument);
+    CHECK_THROWS_AS(voisines(Coord{500,500}),invalid_argument);
     CHECK_THROWS_AS(voisines(Coord{-1,10}),invalid_argument);
     CHECK_THROWS_AS(voisines(Coord{10,-1}),invalid_argument);
-    CHECK_THROWS_AS(voisines(Coord{51,10}),invalid_argument);
-    CHECK_THROWS_AS(voisines(Coord{10,51}),invalid_argument);
+    CHECK_THROWS_AS(voisines(Coord{TAILLEGRILLE,10}),invalid_argument);
+    CHECK_THROWS_AS(voisines(Coord{10,TAILLEGRILLE}),invalid_argument);
 
     // Verifions un milieu
     CHECK(voisines(Coord{10,10}).taille()==8);
@@ -242,8 +311,7 @@ TEST_CASE("Test voisine"){
     }
     */
     
-    //Plus de test à faire pour mieux vérifier
-    
+
     
 }
 
