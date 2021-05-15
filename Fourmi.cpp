@@ -8,13 +8,13 @@ using namespace std;
 #include "Coord.hpp"
 #include "Fourmi.hpp"
 
-Fourmi::Fourmi(Coord a,int indice):coord{a},ind{indice}{
-    aSucre = false;
+Fourmi::Fourmi(Coord a,int indice):coord{a},indice{indice}{
+    sucre = false;
     Vivant = true;
     colonie = -1;
 }
-Fourmi::Fourmi(Coord a,int indice,int colonie):coord{a},ind{indice},colonie{colonie}{
-    aSucre = false;
+Fourmi::Fourmi(Coord a,int indice,int colonie):coord{a},indice{indice},colonie{colonie}{
+    sucre = false;
     Vivant = true;
 }
 
@@ -22,20 +22,18 @@ Coord Fourmi::coords()const{
     return coord;
 }
 int Fourmi::num()const{
-    return ind;
+    return indice;
 }
 int Fourmi::get_colonie()const{
     return colonie;
 }
 bool Fourmi::porteSucre()const{
-    return aSucre;
+    return sucre;
 }
 bool Fourmi::estVivant()const{
     return Vivant;
 }
-void Fourmi::newind(int n){
-    ind=n;
-}
+
 
 ostream &operator<<(ostream &out, const Fourmi &fourmi){
     out<<"Les coords de la fourmi sont "<<fourmi.coords()<<" et son num est"<<fourmi.num();
@@ -55,16 +53,10 @@ void Fourmi::change_colonie(int i){
 }
 
 void Fourmi::prendSucre(){
-    aSucre=true;
+    sucre=true;
 }
 void Fourmi::poseSucre(){
-    aSucre=false;
-}
-void Fourmi::deplace(){
-    EnsCoord a = voisines(coord);
-    //Deplacement aléatoire
-    int k = rand() % a.taille();
-    coord = a.iem(k);
+    sucre=false;
 }
 void Fourmi::deplace(Coord k){
     EnsCoord a = voisines(coord);
@@ -82,10 +74,9 @@ TEST_CASE("Test Méthode prendSucre et PoseSucre + deplace"){
     int p = 12;
     Fourmi k(a,p);
     CHECK_FALSE(k.porteSucre());
-    CHECK_FALSE(voisines(k.coords()).contient(a));
+    //CHECK_FALSE(voisines(k.coords()).contient(a));
     CHECK_THROWS_AS(k.deplace(Coord(8,8)),invalid_argument);
-    k.deplace();
-    CHECK(voisines(k.coords()).contient(a));
+    //CHECK(voisines(k.coords()).contient(a));
     k.prendSucre();
     CHECK(k.porteSucre());
     k.poseSucre();

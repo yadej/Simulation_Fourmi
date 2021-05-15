@@ -38,11 +38,14 @@ int Coord::get_lig()const{
 int Coord::get_col()const{
     return col;
 }
+vector<Coord> EnsCoord::get_tab() const{
+    return tab;
+}
 
-int EnsCoord::Position(Coord co)const{
+int EnsCoord::Position(Coord c)const{
     int a=0;
     for(auto i:tab){
-        if(i==co)return a;
+        if(i==c)return a;
         a++;
     }
     return -1;
@@ -50,11 +53,11 @@ int EnsCoord::Position(Coord co)const{
 
 //Surcharge d'operateur
 
-ostream &operator<<(ostream &out, const Coord &coord){
-    return out<<"("<<coord.get_lig()<<","<<coord.get_col()<<")"<<endl;
+ostream& operator<<(ostream &out, Coord c){
+    return out<<"("<<c.get_lig()<<","<<c.get_col()<<")"<<endl;
 }
 std::ostream& EnsCoord::print(std::ostream& out) const{
-    for(long unsigned int i=0;i<tab.size();i++){
+    for(size_t i=0;i<tab.size();i++){
         out<<tab[i];
     }
     return out;
@@ -71,24 +74,24 @@ ostream &operator<<(ostream &out, const EnsCoord &coordtotal){
     return out;
 }
 */
-bool operator==(Coord const& a, Coord const& b){
+bool operator==(const Coord& a, const Coord& b){
     return a.get_lig()==b.get_lig() and a.get_col()==b.get_col();
 }
-bool operator!=(Coord const& a, Coord const& b){
+bool operator!=(const Coord& a, const Coord& b){
     return !(a==b);
 }
 
 //Fonction
 
-bool EnsCoord::contient(Coord co)const{
-    if(Position(co)==-1)return false;else return true;
+bool EnsCoord::contient(Coord c)const{
+    if(Position(c)==-1)return false;else return true;
 }
-void EnsCoord::ajoute(Coord co){
-    if(!contient(co))tab.push_back(co);
+void EnsCoord::ajoute(Coord c){
+    if(!contient(c))tab.push_back(c);
 }
-void EnsCoord::supprime(Coord co){
-    if(!contient(co))throw invalid_argument("Cette position n'est pas dans le tableau");
-    tab.erase(tab.begin()+Position(co));
+void EnsCoord::supprime(Coord c){
+    if(!contient(c))throw invalid_argument("Cette position n'est pas dans le tableau");
+    tab.erase(tab.begin()+Position(c));
 }
 bool EnsCoord::estVide() const {
     return tab.empty();
@@ -141,7 +144,7 @@ EnsCoord voisines(Coord a){
     int jmax = min(a.get_col()+1,TAILLEGRILLE-1);
     for(int i=imin;i<=imax;i++){
         for(int j=jmin;j<=jmax;j++){
-            Coord k(i,j);
+            Coord k = Coord(i,j);
             if(k!=a)Tout.ajoute(k);
         }
     }

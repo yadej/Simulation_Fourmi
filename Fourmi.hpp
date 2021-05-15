@@ -6,53 +6,79 @@
 #include <iostream>
 
 class Fourmi{
-    Coord coord;
-    int ind;
-    int colonie;
-    bool aSucre;
-    bool Vivant;
+    Coord coord;// Les coord de la fourmi
+    int indice;    // Son indice (unique pour sa colonie)
+    int colonie;// Le numéro de sa colonie
+    bool sucre; // Si elle porte du sucre
+    bool Vivant;// Si elle est vivante
     public:
     //Constructeur
     //* @param[out] f : la fourmi
     //* @param[in] a : coordonnee de la fourmi
     //* @param[in] v : son numero
+    //* vivante et ne portant pas de sucre
     Fourmi(Coord a,int indice);
+    
+    //* @param[in] c : coordonnee de la fourmi
+    //* @param[in] indice : son numero
+    //* @param[in] colonie : sun num de colonie
+    //* @param[out] f : la fourmi vivante
+    //* et ne portant pas de sucre
     Fourmi(Coord a,int indice,int colonie);
     //methode
-    //* Retourne les coord de la fourmi
-    //*  @return : coord
+    
+//* @param[out] c : [Coord] la coord fourmi
     Coord coords()const;
-    //* Retourne le numero de la fourmi
-    //*  @return : ind
+    
+    //* @param[out] i : [int] l'indice de la fourmi
     int num()const;
-    //* Retourne le numero de colonie de la fourmi
-    //*  @return : ind
+    
+    //* @param[out] c : [int] le numéro de la colonie de la fourmi
     int get_colonie()const;
-    //* Test si la fourmi porte du sucre
-    //* @return : un booléen selon le résultat du test
-    bool porteSucre()const;
-    //* Test si la fourmi est morte
-    //* @return : un booléen selon le résultat du test
+    
+    //* @param[out] : [bool] true si elle est vivante, false sinon
     bool estVivant()const;
-    //Change le num de colonie
-    void change_colonie(int i);
-    //* La fourmi prend un sucre
-    void prendSucre();
-    //* La fourmi pose un sucre
-    void poseSucre();
-    //* La fourmi se deplace aleatoirement
-    void deplace();
-    //* La fourmi se deplace dans cette coordonnee si elle est bien proche
-    //* @param[in] k : les coordonnees 
-    void deplace(Coord k);
-    //* Change l'indice de la Fourmi
-    //* @param[in] n: la nouvelle indice
-    void newind(int n);
-    //La Fourmi meurt
+    
+    //* @param[out] : [bool] true si elle porte du sucre, false sinon
+    bool porteSucre()const;
+    
+    // Méthodes
+    
+    // Tue une fourmi
     void meurt();
+    
+    // La fourmi porte du sucre
+    void prendSucre();
+    
+    // La fourmi ne porte plus de sucre
+    void poseSucre();
+    
+    //* @param[in] p : coordonnee de 
+    //* de déplacement de la fourmi
+    //* [error] lève une erreur si la coord
+    //* n'est pas valide ou située trop loin
+    void deplace(Coord p);
+        
+    //* @param[in] i : numéro de la
+    //* nouvelle colonie de la fourmi
+    //* [error] lève une erreur si le num
+    //* de colonie n'est pas valide
+    void change_colonie(int i);
+
 };
+// Fonctions
+
+//* @param[in] c : sun num de colonie
+//* @param[out] k : un vecteur de fourmis constitué
+//* des coordoonées en paramètre. Les fourmi sont vivantes
+//* ne portent pas de sucre et n'appartiennent à aucun colonie
 std::vector<Fourmi> creeTabFourmi(EnsCoord c);
+
+// Surcharge d'opérateur
+
+// Affichage complet d'une fourmi et ses attribus
 std::ostream &operator<<(std::ostream &out, const Fourmi &fourmi);
+
 
 
 
