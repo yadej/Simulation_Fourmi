@@ -123,6 +123,7 @@ namespace SimFourmi{
 
     }
     void runGame(sf::RenderWindow& window,Grille& g,colonie& c){
+        int a = 0;
         while (window.isOpen()){
             sf::Event event;
             while (window.pollEvent(event)){
@@ -140,6 +141,7 @@ namespace SimFourmi{
             }
             mettreAJourFourmiAvecColonie(g,c);
             NouvelleFourmi(g,c);
+            if(a%20==0)g.ajouteSucreAlea();
             g.diminuePheroSucre();
             drawGrid(window);
             drawTrail(window,g);
@@ -148,6 +150,7 @@ namespace SimFourmi{
             drawSucre(window,g);
             window.display();
             window.clear();
+            a++;
             }
 
     }

@@ -1,6 +1,7 @@
 CXX=g++
 CXXFLAGS= -Wall -std=c++11 -g -O3
-EXEC_FILES= tests
+EXEC_FILES1= tests
+EXEC_FILES2= Affichage
 
 all: tests
 # Regle generique
@@ -32,4 +33,7 @@ Grille.o: Grille.cpp Grille.hpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
 
 clean:
-	rm -f *.o $(EXEC_FILES)
+	rm -f *.o $(EXEC_FILES1)
+    
+clean1:
+	rm -f *.o $(EXEC_FILES2)
