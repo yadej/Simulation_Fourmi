@@ -14,29 +14,29 @@
 using namespace std;
 
 Grille::Grille(){
-   _tab = {};
+   tab_ = {};
    for(int i=0;i<TAILLEGRILLE;i++){
-        _tab.push_back({});
+        tab_.push_back({});
         for(int j=0;j<TAILLEGRILLE;j++){
-            _tab[i].push_back(Place(Coord(i,j)));
+            tab_[i].push_back(Place(Coord(i,j)));
         }
     } 
 };
 Grille::Grille(int colonie){
-    _tab = {};
+    tab_ = {};
    for(int i=0;i<TAILLEGRILLE;i++){
-        _tab.push_back({});
+        tab_.push_back({});
         for(int j=0;j<TAILLEGRILLE;j++){
-            _tab[i].push_back(Place(Coord(i,j),colonie));
+            tab_[i].push_back(Place(Coord(i,j),colonie));
         }
     } 
 };
 
 int Grille::TailleGrille(){
-    return _tab.size();
+    return tab_.size();
 }
 int Grille::SubTailleGrille(){
-    return _tab[0].size();
+    return tab_[0].size();
 }
 
 Place Grille::chargePlace(Coord k)const{
@@ -46,7 +46,7 @@ Place Grille::chargePlace(Coord k)const{
     }
     throw invalid_argument("Coordonnee pas dans la Grille");
     */
-    return _tab[k.get_lig()][k.get_col()];
+    return tab_[k.get_lig()][k.get_col()];
 }
 
 void Grille::rangePlace(Place p){
@@ -56,7 +56,7 @@ void Grille::rangePlace(Place p){
     }
     */
     Coord k = p.get_coord();
-    _tab[k.get_lig()][k.get_col()]= p;
+    tab_[k.get_lig()][k.get_col()]= p;
 }
 void placeNid(Grille &g,colonie C){
     for(int i=0;i<C.get_nbColonie();i++){

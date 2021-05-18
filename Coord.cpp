@@ -12,8 +12,8 @@ Coord::Coord(int a,int b){
     if(a < 0 or b < 0 or a >= TAILLEGRILLE or b >= TAILLEGRILLE){
         throw invalid_argument("Position qui n'est pas dans la Grille ");
     }
-    _lig = a;
-    _col = b;
+    lig_ = a;
+    col_ = b;
 };
 TEST_CASE("test Coord") {
     Coord k(5,6);
@@ -26,25 +26,25 @@ TEST_CASE("test Coord") {
     CHECK_THROWS_AS(Coord(20,TAILLEGRILLE),invalid_argument);
 }
 EnsCoord::EnsCoord(){
-    _tab = {};
+    tab_ = {};
 };
 
-EnsCoord::EnsCoord(vector<Coord> Ens):_tab{Ens}{};
+EnsCoord::EnsCoord(vector<Coord> Ens):tab_{Ens}{};
 
 //Fonction getter
 int Coord::get_lig()const{
-    return _lig;
+    return lig_;
 }
 int Coord::get_col()const{
-    return _col;
+    return col_;
 }
 vector<Coord> EnsCoord::get_tab() const{
-    return _tab;
+    return tab_;
 }
 
 int EnsCoord::Position(Coord c)const{
     int a=0;
-    for(auto i:_tab){
+    for(auto i:tab_){
         if(i==c)return a;
         a++;
     }
@@ -67,8 +67,8 @@ void testAffichageCoordonnees(){
 }
 
 std::ostream& EnsCoord::print(std::ostream& out) const{
-    for(size_t i=0;i<_tab.size();i++){
-        out<<_tab[i];
+    for(size_t i=0;i<tab_.size();i++){
+        out<<tab_[i];
     }
     return out;
 }
@@ -124,22 +124,22 @@ TEST_CASE("Méthode contient"){
 
 
 void EnsCoord::ajoute(Coord c){
-    if(!contient(c))_tab.push_back(c);
+    if(!contient(c))tab_.push_back(c);
 }
 void EnsCoord::supprime(Coord c){
     if(!contient(c))throw invalid_argument("Cette position n'est pas dans le tableau");
-    _tab.erase(_tab.begin()+Position(c));
+    tab_.erase(tab_.begin()+Position(c));
 }
 bool EnsCoord::estVide() const {
-    return _tab.empty();
+    return tab_.empty();
 }
 int EnsCoord::taille()const{
-    return(int(_tab.size()));
+    return(int(tab_.size()));
 }
 
 Coord EnsCoord::iem(int n)const{
-    if(n<0 or n>int(_tab.size())-1)throw invalid_argument("Indice incorrect");
-    return _tab[n];
+    if(n<0 or n>int(tab_.size())-1)throw invalid_argument("Indice incorrect");
+    return tab_[n];
 }
 TEST_CASE("Méthodes ajoute, supprime, estVide, taille et iem"){
   vector<Coord> r = {};
@@ -321,7 +321,7 @@ Coord EnsCoord::choixHasard(){
   }
   srand (time(NULL));
   int i = rand()%(taille());
-  return _tab[i];
+  return tab_[i];
 }
 
 TEST_CASE("Fonction choixHasard"){

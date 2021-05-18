@@ -8,30 +8,30 @@ using namespace std;
 #include "Coord.hpp"
 #include "Fourmi.hpp"
 
-Fourmi::Fourmi(Coord a,int indice):_coord{a},_indice{indice}{
-    _sucre = false;
-    _Vivant = true;
-    _colonie = -1;
+Fourmi::Fourmi(Coord a,int indice):coord_{a},indice_{indice}{
+    sucre_ = false;
+    Vivant_ = true;
+    colonie_ = -1;
 }
-Fourmi::Fourmi(Coord a,int indice,int colonie):_coord{a},_indice{indice},_colonie{colonie}{
-    _sucre = false;
-    _Vivant = true;
+Fourmi::Fourmi(Coord a,int indice,int colonie):coord_{a},indice_{indice},colonie_{colonie}{
+    sucre_ = false;
+    Vivant_ = true;
 }
 
 Coord Fourmi::coords()const{
-    return _coord;
+    return coord_;
 }
 int Fourmi::num()const{
-    return _indice;
+    return indice_;
 }
 int Fourmi::get_colonie()const{
-    return _colonie;
+    return colonie_;
 }
 bool Fourmi::porteSucre()const{
-    return _sucre;
+    return sucre_;
 }
 bool Fourmi::estVivant()const{
-    return _Vivant;
+    return Vivant_;
 }
 
 
@@ -43,25 +43,25 @@ ostream &operator<<(ostream &out, const Fourmi &fourmi){
 }
 
 void Fourmi::change_colonie(int i){
-    _colonie = i;
+    colonie_ = i;
 }
 
 void Fourmi::prendSucre(){
-    _sucre=true;
+    sucre_=true;
 }
 void Fourmi::poseSucre(){
-    _sucre=false;
+    sucre_=false;
 }
 void Fourmi::deplace(Coord k){
-    EnsCoord a = voisines(_coord);
+    EnsCoord a = voisines(coord_);
     if(a.contient(k)){
-        _coord=k;
+        coord_=k;
     }else{
         throw invalid_argument("Position trop loin");
     }
 }
 void Fourmi::meurt(){
-    _Vivant = false;
+    Vivant_ = false;
 }
 TEST_CASE("Test du constructeur Fourmi"){
   Fourmi f(Coord(0, 1), 2, 0);
