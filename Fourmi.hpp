@@ -6,11 +6,11 @@
 #include <iostream>
 
 class Fourmi{
-    Coord coord;// Les coord de la fourmi
-    int indice;    // Son indice (unique pour sa colonie)
-    int colonie;// Le numéro de sa colonie
-    bool sucre; // Si elle porte du sucre
-    bool Vivant;// Si elle est vivante
+    Coord _coord;// Les coord de la fourmi
+    int _indice;    // Son indice (unique pour sa colonie)
+    int _colonie;// Le numéro de sa colonie
+    bool _sucre; // Si elle porte du sucre
+    bool _Vivant;// Si elle est vivante
     public:
     //Constructeur
     //* @param[out] f : la fourmi

@@ -171,7 +171,7 @@ int main (){
     lineariserPheroNid(g,2);
     lineariserPheroNid(g,3);
     //g.dessine();
-    for(int i=0;i<100;i++){
+    for(int i=0;i<300;i++){
         mettreAJourFourmiAvecColonie(g,k);
         if(i%20 == 0){
             g.ajouteSucreAlea();

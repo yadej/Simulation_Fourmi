@@ -13,28 +13,28 @@
 class Place{
   // Attribus
   //* Coordonnées de la place
-  Coord coord;
+  Coord _coord;
     
   //* Le numéro de la fourmi si elle en contient, sinon -1
-  int numeroFourmi;
+  int _numeroFourmi;
     
   //* Numéro de colonie du Nid/Fourmi si elle contient
   //* l'un des deux, sinon -1
-  int numeroColonie;
+  int _numeroColonie;
     
   //* true si elle contient du sucre, false sinon
-  bool sucre;
+  bool _sucre;
     
   //* true si elle contient un nid, false sinon
-  bool nid;
+  bool _nid;
   
   //* Tableau contenant en indice 0, l'intensité des phéromones
   //* de sucre de la colonie 0, puis celle de la colonie 2,...
-  std::vector<int> pheroSucre;
+  std::vector<int> _pheroSucre;
     
   //* Tableau contenant en indice 0, l'intensité des phéromones
   //* de sucre de la colonie 0, puis celle de la colonie 2,...
-  std::vector<float> pheroNid;
+  std::vector<float> _pheroNid;
 
     
   public:

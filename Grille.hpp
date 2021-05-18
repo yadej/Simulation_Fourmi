@@ -14,7 +14,7 @@ class Grille{
   // Attribut
     
   //* Un vecteur de vecteur contenant des places
-  std::vector<std::vector<Place>> tab;
+  std::vector<std::vector<Place>> _tab;
     
   public:
     

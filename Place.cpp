@@ -13,58 +13,58 @@
 
 using namespace std;
 
-Place::Place(Coord c):coord{c}{
-    numeroFourmi = -1;
-    numeroColonie = -1;
-    sucre = false;
-    nid =false;
-    pheroSucre = {0};
-    pheroNid = {0};
+Place::Place(Coord c):_coord{c}{
+    _numeroFourmi = -1;
+    _numeroColonie = -1;
+    _sucre = false;
+    _nid =false;
+    _pheroSucre = {0};
+    _pheroNid = {0};
 }
-Place::Place(Coord c,int colonie):coord{c}{
-    numeroFourmi = -1;
-    sucre = false;
-    nid =false;
-    pheroSucre = {};
-    pheroNid = {};
-    numeroColonie = -1;
+Place::Place(Coord c,int colonie):_coord{c}{
+    _numeroFourmi = -1;
+    _sucre = false;
+    _nid =false;
+    _pheroSucre = {};
+    _pheroNid = {};
+    _numeroColonie = -1;
     for(int i = 0; i<colonie;i++){
-        pheroNid.push_back(0);
-        pheroSucre.push_back(0);
+        _pheroNid.push_back(0);
+        _pheroSucre.push_back(0);
     }
 }
 Coord Place::get_coord() const{
-    return coord;
+    return _coord;
 }
 vector<int> Place::get_pheroSucre() const{
-    return pheroSucre;
+    return _pheroSucre;
 }
 int Place::get_pheroSucre(int i) const{
-    return pheroSucre[i];
+    return _pheroSucre[i];
 }
 std::vector<float>  Place::get_pheroNid() const{
-    return pheroNid;
+    return _pheroNid;
 }
 float Place::get_pheroNid(int i) const{
-    return pheroNid[i];
+    return _pheroNid[i];
 }
 int Place::get_numeroFourmi() const{
-    return numeroFourmi;
+    return _numeroFourmi;
 }
 int Place::get_numeroColonie() const{
-    return numeroColonie;
+    return _numeroColonie;
 }
 bool Place::contientSucre() const{
-    return sucre;
+    return _sucre;
 }
 bool Place::contientNid() const{
-    return nid;
+    return _nid;
 }
 bool Place::estSurUnePiste() const{
-    if(pheroSucre[0]==0)return false;else return true;
+    if(_pheroSucre[0]==0)return false;else return true;
 }
 bool Place::estSurUnePiste(int ind) const{
-    if(pheroSucre[ind]==0)return false;else return true;
+    if(_pheroSucre[ind]==0)return false;else return true;
 }
 TEST_CASE("Test Constructeur Place"){
     Place p(Coord{3,4},3);
@@ -83,51 +83,51 @@ void Place::poseSucre(){
     if(contientNid())throw invalid_argument("Impossible de poser du sucre sur un nid");   
     if(get_numeroFourmi() != -1)throw invalid_argument("Impossible de poser du sucre sur une fourmi");  
     if(contientSucre())throw invalid_argument("Impossible de poser du sucre sur un sucre"); 
-    sucre = true;
-    for(size_t i=0;i<pheroSucre.size();i++){
-        pheroSucre[i] = 255;
+    _sucre = true;
+    for(size_t i=0;i<_pheroSucre.size();i++){
+        _pheroSucre[i] = 255;
     }
 }
 void Place::enleveSucre(){
-    sucre = false;
+    _sucre = false;
 }
 void Place::poseNid(int i){
     if(contientSucre())throw invalid_argument("Impossible de poser un nid sur un sucre"); 
     if(get_numeroFourmi() != -1)throw invalid_argument("Impossible de poser un nid sur une fourmi"); 
-    nid = true;
-    pheroNid[i] = 1;
-    numeroColonie = i;
+    _nid = true;
+    _pheroNid[i] = 1;
+    _numeroColonie = i;
 
 }
 void Place::poseFourmi(Fourmi g){
     if(contientNid())throw invalid_argument("Impossible de poser une fourmi sur un nid"); 
     if(contientSucre())throw invalid_argument("Impossible de poser une fourmi sur un sucre");
     if(get_coord()!=g.coords())throw invalid_argument("Coordonnées de Fourmi et place différentes !");
-    numeroFourmi = g.num();
-    numeroColonie = g.get_colonie();
+    _numeroFourmi = g.num();
+    _numeroColonie = g.get_colonie();
 }
 void Place::enleveFourmi(){
-   if(numeroFourmi != -1){
-        numeroFourmi = -1;
-        numeroColonie = -1;
+   if(_numeroFourmi != -1){
+        _numeroFourmi = -1;
+        _numeroColonie = -1;
     } 
 
 }
 void Place::posePheroNid(float a,int i){
     if(a<0 or a>1)throw invalid_argument("pheroNid doit etre compris entre 0 et 1");
-    int h = pheroNid.size() - 1;
+    int h = _pheroNid.size() - 1;
     if(i < 0 or i > h)throw invalid_argument("La colonie n'est pas valide");   
-    pheroNid[i] = a;
+    _pheroNid[i] = a;
 }
 void Place::posePheroSucre(){
-    pheroSucre[0] = 255;
+    _pheroSucre[0] = 255;
 }
 void Place::posePheroSucre(int ind){
-    pheroSucre[ind] = 255;
+    _pheroSucre[ind] = 255;
 }
 void Place::diminuePheroSucre(){
-    for(size_t i=0;i<pheroSucre.size();i++){
-        if(pheroSucre[i] <= 5)pheroSucre[i] = 0;else pheroSucre[i] -= 5;   
+    for(size_t i=0;i<_pheroSucre.size();i++){
+        if(_pheroSucre[i] <= 5)_pheroSucre[i] = 0;else _pheroSucre[i] -= 5;   
     }
 }
 void deplaceFourmi(Fourmi &f, Place &p1, Place &p2){

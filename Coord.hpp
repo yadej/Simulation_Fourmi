@@ -5,12 +5,12 @@
 #include <string>
 #include <iostream>
 
-const int TAILLEGRILLE = 50;
+const int TAILLEGRILLE = 20;
 
 class Coord{
   // Attribus
-  int lig; // La ligne où se positionne la coordonnée
-  int col; // La colonne où se positionne la coordonnée
+  int _lig; // La ligne où se positionne la coordonnée
+  int _col; // La colonne où se positionne la coordonnée
   
   public:
     
@@ -48,7 +48,7 @@ bool operator!=(const Coord& a, const Coord& b);
 
 class EnsCoord{
   // Attribus
-  std::vector<Coord> tab; // Un vecteur contenant les coordonnées
+  std::vector<Coord> _tab; // Un vecteur contenant les coordonnées
     
    // Méthodes
     

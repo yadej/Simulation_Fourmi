@@ -14,73 +14,73 @@
 using namespace std;
 
 colonie::colonie(int colonie){
-    nbColonie = colonie;
-    C = {};
-    Nid = {};
-    NSucre ={};
-    for(int i=0;i < nbColonie;i++){
-        NSucre.push_back(0);
+    _nbColonie = colonie;
+    _C = {};
+    _Nid = {};
+    _NSucre ={};
+    for(int i=0;i < _nbColonie;i++){
+        _NSucre.push_back(0);
     }
 }
 int colonie::taille()const{
-    return C.size();
+    return _C.size();
 }
 int colonie::Nidtaille()const{
-    return Nid.size();
+    return _Nid.size();
 }
     
 vector<Fourmi> colonie::get_colonie_ind(int ind)const{
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n1");
-    return C[ind];
+    if(ind < 0 or ind >= _nbColonie)throw invalid_argument("Mauvais indice n1");
+    return _C[ind];
 }
 int colonie::get_Sucre_ind(int ind)const{
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n2");
-    return NSucre[ind];
+    if(ind < 0 or ind >= _nbColonie)throw invalid_argument("Mauvais indice n2");
+    return _NSucre[ind];
 }
 EnsCoord colonie::get_coord_Nid(int ind)const{
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n3");
-    return Nid[ind];
+    if(ind < 0 or ind >= _nbColonie)throw invalid_argument("Mauvais indice n3");
+    return _Nid[ind];
 }
 int colonie::get_nbColonie()const{
-    return nbColonie;
+    return _nbColonie;
 }
 
 void colonie::ajoute_colonie(vector<Fourmi> F){
-    if(int(C.size())== nbColonie)throw invalid_argument("Toutes les colonies sont déja remplis");
+    if(int(_C.size())== _nbColonie)throw invalid_argument("Toutes les colonies sont déja remplis");
     for(size_t i=0;i<F.size();i++){
-        F[i].change_colonie(C.size());
+        F[i].change_colonie(_C.size());
         if(F[i].num()!=int(i))throw invalid_argument("Mauvais indice de tableau");
     }
-    C.push_back(F);
+    _C.push_back(F);
 }
 void colonie::ajoute_Fourmi(Coord Ca,int ind){
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n4");
+    if(ind < 0 or ind >= _nbColonie)throw invalid_argument("Mauvais indice n4");
     Fourmi F = Fourmi(Ca,get_colonie_ind(ind).size(),ind);
-    C[ind].push_back(F);
+    _C[ind].push_back(F);
 }
 void colonie::ajoute_Nid_colonie(EnsCoord Ca){
-    if(int(Nid.size())== nbColonie)throw invalid_argument("Toutes les nids de colonies sont déja remplis");
-    Nid.push_back(Ca);
+    if(int(Nidtaille())== _nbColonie)throw invalid_argument("Toutes les nids de colonies sont déja remplis");
+    _Nid.push_back(Ca);
 }
 void colonie::ajoute_Sucre(int ind){
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n5");
-    NSucre[ind] +=1;
+    if(ind < 0 or ind >= _nbColonie)throw invalid_argument("Mauvais indice n5");
+    _NSucre[ind] +=1;
 }
 void colonie::colonie_remplace(vector<Fourmi> F,int ind){
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n6");
+    if(ind < 0 or ind >= _nbColonie)throw invalid_argument("Mauvais indice n6");
     for(size_t i=0;i<F.size();i++){
         F[i].change_colonie(ind);
     }
-    C[ind] = F;
+    _C[ind] = F;
 }
 void colonie::colonie_Fourmi_meurt(int ind,int pos){
-    if(ind < 0 or ind >= nbColonie)throw invalid_argument("Mauvais indice n7");
+    if(ind < 0 or ind >= _nbColonie)throw invalid_argument("Mauvais indice n7");
     if(pos > int(get_colonie_ind(ind).size()))throw invalid_argument("Pos trop grand");
-    C[ind][pos].meurt();
+    _C[ind][pos].meurt();
 }
 bool colonie::SucreReset(int ind){
-    if(NSucre[ind] >= 10){
-        NSucre[ind] -= 10;
+    if(_NSucre[ind] >= 10){
+        _NSucre[ind] -= 10;
         return true;
     }
     return false;

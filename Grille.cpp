@@ -14,29 +14,29 @@
 using namespace std;
 
 Grille::Grille(){
-   tab = {};
+   _tab = {};
    for(int i=0;i<TAILLEGRILLE;i++){
-        tab.push_back({});
+        _tab.push_back({});
         for(int j=0;j<TAILLEGRILLE;j++){
-            tab[i].push_back(Place(Coord(i,j)));
+            _tab[i].push_back(Place(Coord(i,j)));
         }
     } 
 };
 Grille::Grille(int colonie){
-    tab = {};
+    _tab = {};
    for(int i=0;i<TAILLEGRILLE;i++){
-        tab.push_back({});
+        _tab.push_back({});
         for(int j=0;j<TAILLEGRILLE;j++){
-            tab[i].push_back(Place(Coord(i,j),colonie));
+            _tab[i].push_back(Place(Coord(i,j),colonie));
         }
     } 
 };
 
 int Grille::TailleGrille(){
-    return tab.size();
+    return _tab.size();
 }
 int Grille::SubTailleGrille(){
-    return tab[0].size();
+    return _tab[0].size();
 }
 
 Place Grille::chargePlace(Coord k)const{
@@ -46,7 +46,7 @@ Place Grille::chargePlace(Coord k)const{
     }
     throw invalid_argument("Coordonnee pas dans la Grille");
     */
-    return tab[k.get_lig()][k.get_col()];
+    return _tab[k.get_lig()][k.get_col()];
 }
 
 void Grille::rangePlace(Place p){
@@ -56,7 +56,7 @@ void Grille::rangePlace(Place p){
     }
     */
     Coord k = p.get_coord();
-    tab[k.get_lig()][k.get_col()]= p;
+    _tab[k.get_lig()][k.get_col()]= p;
 }
 void placeNid(Grille &g,colonie C){
     for(int i=0;i<C.get_nbColonie();i++){
@@ -413,7 +413,7 @@ void chercheSucreSurPiste(Fourmi &f, Place &P1, Place &P2){
 }
 
 bool chercheSucreSurPiste_condition(Fourmi f, Place P1, Place P2){
-  return not(f.porteSucre()) and P1.estSurUnePiste(f.get_colonie()) and estVide(P2) and P2.estSurUnePiste() and estPlusLoinNid(P2, P1,f.get_colonie());
+  return not(f.porteSucre()) and P1.estSurUnePiste(f.get_colonie()) and estVide(P2) and P2.estSurUnePiste(f.get_colonie()) and estPlusLoinNid(P2, P1,f.get_colonie());
 }
 
 //6)    
@@ -649,17 +649,17 @@ TEST_CASE("Grille 2 Colonie"){
     Grille g = initialiseGrille(k,S,2);
     lineariserPheroNid(g,0);
     lineariserPheroNid(g,1);
-    //g.affichePheroNid(0);
-    //cout<<endl;
-    //g.affichePheroNid(1);
+    g.affichePheroNid(0);
+    cout<<endl;
+    g.affichePheroNid(1);
     g.dessine();
-    for(int i=0;i<100;i++){
+    for(int i=0;i<10;i++){
         mettreAJourFourmiAvecColonie(g,k);
         NouvelleFourmi(g,k);
-       // Affiche_NbFourmiColonie(k);
-        //cout<<k.get_Sucre_ind(0)<<endl;
-        //cout<<k.get_Sucre_ind(1)<<endl;
-        //g.dessine();
+        Affiche_NbFourmiColonie(k);
+        cout<<k.get_Sucre_ind(0)<<endl;
+        cout<<k.get_Sucre_ind(1)<<endl;
+        g.dessine();
         g.diminuePheroSucre();
         if(i%20==0)g.ajouteSucreAlea();
     } 

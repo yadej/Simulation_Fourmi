@@ -17,18 +17,18 @@ class colonie{
     //* fourmis de chaque colonie
     //* exemple: C[0] contient les fourmis
     //* de la colonie 0, C[1] celle de la 1
-    std::vector<std::vector<Fourmi>> C;   
+    std::vector<std::vector<Fourmi>> _C;   
     
     //* Un vecteur contenant le nombre de
     //* sucre dans chaque nid de colonie
-    std::vector<int> NSucre;
+    std::vector<int> _NSucre;
     
     //* Un vecteur contenant les coordonnées
     //* du nid de chaque colonie
-    std::vector<EnsCoord>Nid;
+    std::vector<EnsCoord>_Nid;
     
     //* Le nombre total de colonies
-    int nbColonie;
+    int _nbColonie;
     public:
     //Constructeurs
     
